@@ -4,8 +4,9 @@ import { google as googleSpeech } from "@google-cloud/speech/build/protos/protos
 import AudioEncoding = googleSpeech.cloud.speech.v1.RecognitionConfig.AudioEncoding;
 
 export async function POST(request: Request) {
-  console.log("POST")
-  console.log(process.env.GOOGLE_PRIVATE_KEY)
+  const body = await request.json();
+  const audioBase64 = body.audio;
+
   const auth = new google.auth.GoogleAuth({
     credentials: {
       client_id: process.env.GOOGLE_CLIENT_ID || "",
@@ -19,8 +20,9 @@ export async function POST(request: Request) {
   });
 
   const audio = {
-    uri: 'gs://audio-gpt/audio (5).wav',
+    content: audioBase64.replace("data:audio/webm;base64,", ""),
   }
+
   const config = {
     encoding: AudioEncoding.WEBM_OPUS,
     sampleRateHertz: 48000,
@@ -43,5 +45,7 @@ export async function POST(request: Request) {
     .join('\n');
   console.log(`Transcription: ${transcription}`);
 
-  return new Response(transcription);
+  return new Response(JSON.stringify({
+    translate: transcription
+  }));
 }
