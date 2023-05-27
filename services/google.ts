@@ -9,12 +9,11 @@ import TextAudioEncoding = googleText.cloud.texttospeech.v1.AudioEncoding;
 
 export class GoogleService {
   private static instance: GoogleService;
-  private readonly auth: GoogleAuth;
   private speechClient: SpeechClient;
   private textClient: TextToSpeechClient;
 
   constructor() {
-    this.auth = new GoogleAuth({
+    const speechAuth = new GoogleAuth({
       credentials: {
         client_id: process.env.GOOGLE_CLIENT_ID || "",
         client_email: process.env.GOOGLE_CLIENT_EMAIL || "",
@@ -22,8 +21,16 @@ export class GoogleService {
       },
     });
 
-    this.speechClient = new SpeechClient({auth: this.auth});
-    this.textClient = new TextToSpeechClient({auth: this.auth});
+    const textAuth = new GoogleAuth({
+      credentials: {
+        client_id: process.env.GOOGLE_CLIENT_ID || "",
+        client_email: process.env.GOOGLE_CLIENT_EMAIL || "",
+        private_key: (process.env.GOOGLE_PRIVATE_KEY || "").replace(/\\n/g, '\n'),
+      },
+    });
+
+    this.speechClient = new SpeechClient({auth: speechAuth});
+    this.textClient = new TextToSpeechClient({auth: textAuth});
   }
 
   public static getInstance(): GoogleService {
@@ -63,15 +70,18 @@ export class GoogleService {
       .join('\n');
   }
 
-  public textToSpeech = async (text: string) =>  {
-      const request = {
-        input: {text: text},
-        voice: {languageCode: 'en-US', ssmlGender: SsmlVoiceGender.NEUTRAL},
-        audioConfig: {audioEncoding: TextAudioEncoding.MP3},
-      };
+  public textToSpeech = async (text: string) => {
+    console.log('text to speech in');
+    const request = {
+      input: {text: text},
+      voice: {languageCode: 'en-US', ssmlGender: SsmlVoiceGender.NEUTRAL},
+      audioConfig: {audioEncoding: TextAudioEncoding.MP3},
+    };
 
-      const [response] = await this.textClient.synthesizeSpeech(request);
+    const [response] = await this.textClient.synthesizeSpeech(request);
+    console.log('reeeee');
+    console.log(response);
 
-      return response.audioContent;
+    return response.audioContent;
   }
 }
