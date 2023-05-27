@@ -1,12 +1,17 @@
 import { GoogleAuth } from "google-auth-library";
 import { SpeechClient } from "@google-cloud/speech";
 import { google as googleSpeech } from "@google-cloud/speech/build/protos/protos";
-import AudioEncoding = googleSpeech.cloud.speech.v1.RecognitionConfig.AudioEncoding;
+import SpeechAudioEncoding = googleSpeech.cloud.speech.v1.RecognitionConfig.AudioEncoding;
+import { TextToSpeechClient } from "@google-cloud/text-to-speech";
+import { google as googleText } from "@google-cloud/text-to-speech/build/protos/protos";
+import SsmlVoiceGender = googleText.cloud.texttospeech.v1.SsmlVoiceGender;
+import TextAudioEncoding = googleText.cloud.texttospeech.v1.AudioEncoding;
 
 export class GoogleService {
   private static instance: GoogleService;
   private readonly auth: GoogleAuth;
   private speechClient: SpeechClient;
+  private textClient: TextToSpeechClient;
 
   constructor() {
     this.auth = new GoogleAuth({
@@ -18,6 +23,7 @@ export class GoogleService {
     });
 
     this.speechClient = new SpeechClient({auth: this.auth});
+    this.textClient = new TextToSpeechClient({auth: this.auth});
   }
 
   public static getInstance(): GoogleService {
@@ -35,7 +41,7 @@ export class GoogleService {
     }
 
     const config = {
-      encoding: AudioEncoding.WEBM_OPUS,
+      encoding: SpeechAudioEncoding.WEBM_OPUS,
       sampleRateHertz: 48000,
       languageCode: 'ko-KR',
     }
@@ -47,7 +53,6 @@ export class GoogleService {
 
     const [response] = await this.speechClient.recognize(googleRequest);
     if (response.results === null || response.results === undefined) return "";
-    console.log(response.results);
 
     return response.results
       .map((result) => {
@@ -56,5 +61,17 @@ export class GoogleService {
         return result.alternatives[0].transcript;
       })
       .join('\n');
+  }
+
+  public textToSpeech = async (text: string) =>  {
+      const request = {
+        input: {text: text},
+        voice: {languageCode: 'en-US', ssmlGender: SsmlVoiceGender.NEUTRAL},
+        audioConfig: {audioEncoding: TextAudioEncoding.MP3},
+      };
+
+      const [response] = await this.textClient.synthesizeSpeech(request);
+
+      return response.audioContent;
   }
 }
