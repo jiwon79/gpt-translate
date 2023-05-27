@@ -6,7 +6,6 @@ export async function POST(request: Request) {
   const googleService = GoogleService.getInstance();
 
   const transcription = await googleService.recognize(audioBase64);
-  console.log(transcription);
 
   return new Response(JSON.stringify({
     translate: transcription

@@ -71,7 +71,6 @@ export class GoogleService {
   }
 
   public textToSpeech = async (text: string) => {
-    console.log('text to speech in');
     const request = {
       input: {text: text},
       voice: {languageCode: 'en-US', ssmlGender: SsmlVoiceGender.NEUTRAL},
@@ -79,8 +78,6 @@ export class GoogleService {
     };
 
     const [response] = await this.textClient.synthesizeSpeech(request);
-    console.log('reeeee');
-    console.log(response);
 
     return response.audioContent;
   }
