@@ -1,49 +1,12 @@
-import { SpeechClient } from "@google-cloud/speech";
-import { google } from "googleapis";
-import { google as googleSpeech } from "@google-cloud/speech/build/protos/protos";
-import AudioEncoding = googleSpeech.cloud.speech.v1.RecognitionConfig.AudioEncoding;
+import { GoogleService } from "@/services/google";
 
 export async function POST(request: Request) {
   const body = await request.json();
   const audioBase64 = body.audio;
+  const googleService = GoogleService.getInstance();
 
-  const auth = new google.auth.GoogleAuth({
-    credentials: {
-      client_id: process.env.GOOGLE_CLIENT_ID || "",
-      client_email: process.env.GOOGLE_CLIENT_EMAIL || "",
-      private_key: (process.env.GOOGLE_PRIVATE_KEY || "").replace(/\\n/g, '\n'),
-    },
-  });
-
-  const client = new SpeechClient({
-    auth: auth,
-  });
-
-  const audio = {
-    content: audioBase64.replace("data:audio/webm;base64,", ""),
-  }
-
-  const config = {
-    encoding: AudioEncoding.WEBM_OPUS,
-    sampleRateHertz: 48000,
-    languageCode: 'ko-KR',
-  }
-  const googleRequest = {
-    audio: audio,
-    config: config,
-  }
-
-  const [response] = await client.recognize(googleRequest);
-  if (response.results === null || response.results === undefined) return;
-  console.log(response.results);
-
-  const transcription = response.results
-    .map(result => {
-      // @ts-ignore
-      return result.alternatives[0].transcript;
-    })
-    .join('\n');
-  console.log(`Transcription: ${transcription}`);
+  const transcription = await googleService.recognize(audioBase64);
+  console.log(transcription);
 
   return new Response(JSON.stringify({
     translate: transcription

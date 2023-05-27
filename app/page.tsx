@@ -8,7 +8,7 @@ export default function Home() {
   const {audioURL, isRecording, startRecording, stopRecording,} = useRecorder();
   const [word, setWord] = useState<string>('');
 
-  async function fetchAndEncode(url: string) {
+  async function fetchAndEncode(url: string): Promise<string> {
     // Fetch the file
     const response = await fetch(url);
     const data = await response.blob();
@@ -17,9 +17,9 @@ export default function Home() {
     const reader = new FileReader();
 
     // Convert the blob to base64
-    const promise = new Promise((resolve, reject) => {
+    const promise: Promise<string> = new Promise((resolve, reject) => {
       reader.onloadend = () => {
-        resolve(reader.result);
+        resolve(reader.result as string);
       };
       reader.onerror = reject;
     });
@@ -39,7 +39,7 @@ export default function Home() {
         "Content-Type": "application/pdf",
       },
       body: JSON.stringify({
-        audio: audioBase64,
+        audio: audioBase64.replace("data:audio/webm;base64,", ""),
       }),
     });
     return response.json();
