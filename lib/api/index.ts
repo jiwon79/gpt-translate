@@ -1,20 +1,30 @@
+export interface BasicResponse {
+  statusCode: number;
+}
+
 const initialHeaders: HeadersInit = {
   'Content-Type': 'application/json',
 }
 
-const getRequest = (url: string, headers: HeadersInit | undefined) => {
-  return fetch(url, {
-    method: 'GET',
-    headers: headers || initialHeaders,
-  });
+const responseBody = async (response: Response) => {
+  const responseJson = await response.json();
+
+  return Object.assign(responseJson, { statusCode: response.status });
 }
 
-const postRequest = (url: string, data: any, headers: HeadersInit | undefined) => {
+const getRequest = (url: string, headers: HeadersInit = initialHeaders) => {
+  return fetch(url, {
+    method: 'GET',
+    headers: headers,
+  }).then(responseBody);
+}
+
+const postRequest = (url: string, data: {}, headers: HeadersInit = initialHeaders) => {
   return fetch(url, {
     method: 'POST',
-    headers: headers || initialHeaders,
+    headers: headers,
     body: JSON.stringify(data),
-  });
+  }).then(responseBody);
 }
 
 const request = {
