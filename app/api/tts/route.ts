@@ -1,4 +1,4 @@
-import { GoogleService } from "@/services/google";
+import { GoogleService } from "@/lib/services/google";
 
 interface IRequest extends Request {
   json: () => Promise<{text: string}>;

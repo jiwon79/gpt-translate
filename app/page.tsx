@@ -1,7 +1,7 @@
 "use client"
 import styles from './page.module.css'
 import { useState } from "react";
-import useRecorder from "@/hooks/useRecorder";
+import useRecorder from "@/lib/hooks/useRecorder";
 
 export default function Home() {
   const {audioURL, isRecording, startRecording, stopRecording,} = useRecorder();
