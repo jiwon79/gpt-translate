@@ -3,42 +3,20 @@ import styles from './page.module.css'
 import { useState } from "react";
 import useRecorder from "@/lib/hooks/useRecorder";
 import speechTextAPI from "@/lib/api/speechTextAPI";
+import { blobUrlToBase64 } from "@/lib/utils/function";
 
 export default function Home() {
   const {audioURL, isRecording, startRecording, stopRecording,} = useRecorder();
   const [word, setWord] = useState<string>('');
   const [audioContent, setAudioContent] = useState<string>('');
 
-  async function fetchAndEncode(url: string): Promise<string> {
-    // Fetch the file
-    const response = await fetch(url);
-    const data = await response.blob();
-
-    // Create a new FileReader instance
-    const reader = new FileReader();
-
-    // Convert the blob to base64
-    const promise: Promise<string> = new Promise((resolve, reject) => {
-      reader.onloadend = () => {
-        resolve(reader.result as string);
-      };
-      reader.onerror = reject;
-    });
-
-    await reader.readAsDataURL(data);
-
-    // The promise will resolve with the reader.result
-    return promise;
-  }
-
   const fetchSTT = async () => {
-    const audioBase64 = await fetchAndEncode(audioURL);
-    const audio = audioBase64.replace("data:audio/webm;base64,", "");
+    const base64 = await blobUrlToBase64(audioURL);
 
-    return await speechTextAPI.stt(audio);
+    return await speechTextAPI.stt(base64);
   }
 
-  const onClick = async () => {
+  const handleRecording = async () => {
     if (isRecording) {
       stopRecording();
       return;
@@ -47,22 +25,19 @@ export default function Home() {
   }
 
   const fetchTTS = async (text: string) => {
-    const response = await fetch("/api/tts", {
-      method: "POST",
-      body: JSON.stringify({
-        text: text,
-      }),
-    });
+    const response = await speechTextAPI.tts(text);
+    console.log(response.audioContent);
 
-    const jsonResponse = await response.json();
-
-    return jsonResponse.audioContent;
+    return response.audioContent;
   }
 
   const handleAudioUrl = async () => {
     const result = await fetchSTT();
     setWord(result.translate);
     console.log(result.translate);
+    if (result.translate.replaceAll(" ", "") === "") {
+      return;
+    }
     const audio = await fetchTTS(result.translate);
     let bufferData = audio.data;
     let arrayBuffer = new Uint8Array(bufferData).buffer;
@@ -80,7 +55,7 @@ export default function Home() {
       <audio controls src={audioContent}>TTS</audio>
       <p>{isRecording ? "녹음중" : "녹음 아님"}</p>
       <p>STT 결과 : {word}</p>
-      <button onClick={onClick}>녹음</button>
+      <button onClick={handleRecording}>녹음</button>
       <button onClick={async () => {
         await handleAudioUrl();
       }}>음성인식</button>
