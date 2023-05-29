@@ -5,7 +5,10 @@ interface STTResponse extends BasicResponse {
 }
 
 interface TTSResponse extends BasicResponse {
-  audioContent: string;
+  audioContent: {
+    type: string;
+    data: number[];
+  };
 }
 
 const speechTextAPI = {

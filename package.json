@@ -16,11 +16,14 @@
     "@types/react-dom": "18.2.4",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.3",
-    "fs": "^0.0.1-security",
     "googleapis": "^118.0.0",
     "next": "13.4.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "request": "^2.88.2",
     "typescript": "5.0.4"
+  },
+  "devDependencies": {
+    "encoding": "^0.1.13"
   }
 }
