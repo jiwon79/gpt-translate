@@ -2,6 +2,7 @@
 import styles from './page.module.css'
 import { useState } from "react";
 import useRecorder from "@/lib/hooks/useRecorder";
+import speechTextAPI from "@/lib/api/speechTextAPI";
 
 export default function Home() {
   const {audioURL, isRecording, startRecording, stopRecording,} = useRecorder();
@@ -34,16 +35,7 @@ export default function Home() {
     const audioBase64 = await fetchAndEncode(audioURL);
     const audio = audioBase64.replace("data:audio/webm;base64,", "");
 
-    const response= await fetch("/api/stt", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/pdf",
-      },
-      body: JSON.stringify({
-        audio: audio,
-      }),
-    });
-    return response.json();
+    return await speechTextAPI.stt(audio);
   }
 
   const onClick = async () => {
