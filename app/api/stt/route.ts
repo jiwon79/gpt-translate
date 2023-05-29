@@ -1,11 +1,15 @@
 import { GoogleService } from "@/services/google";
 
-export async function POST(request: Request) {
+interface IRequest extends Request {
+  json: () => Promise<{audio: string}>;
+}
+
+export async function POST(request: IRequest) {
   const body = await request.json();
-  const audioBase64 = body.audio;
+  const audio = body.audio;
   const googleService = GoogleService.getInstance();
 
-  const transcription = await googleService.recognize(audioBase64);
+  const transcription = await googleService.recognize(audio);
 
   return new Response(JSON.stringify({
     translate: transcription

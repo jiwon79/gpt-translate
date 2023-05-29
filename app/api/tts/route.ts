@@ -1,6 +1,10 @@
 import { GoogleService } from "@/services/google";
 
-export async function POST(request: Request) {
+interface IRequest extends Request {
+  json: () => Promise<{text: string}>;
+}
+
+export async function POST(request: IRequest) {
   const body = await request.json();
   const text = body.text;
   const googleService = GoogleService.getInstance();
