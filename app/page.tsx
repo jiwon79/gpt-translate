@@ -3,7 +3,8 @@ import styles from './page.module.css'
 import { useState } from "react";
 import useRecorder from "@/lib/hooks/useRecorder";
 import speechTextAPI from "@/lib/api/speechTextAPI";
-import { blobUrlToBase64 } from "@/lib/utils/function";
+import { audioArrayToUrl, blobUrlToBase64 } from "@/lib/utils/function";
+import '@/lib/utils/prototype';
 
 export default function Home() {
   const {audioURL, isRecording, startRecording, stopRecording,} = useRecorder();
@@ -35,15 +36,11 @@ export default function Home() {
     const result = await fetchSTT();
     setWord(result.translate);
     console.log(result.translate);
-    if (result.translate.replaceAll(" ", "") === "") {
+    if (result.translate.isBlank()) {
       return;
     }
     const audio = await fetchTTS(result.translate);
-    let bufferData = audio.data;
-    let arrayBuffer = new Uint8Array(bufferData).buffer;
-
-    let audioBlob = new Blob([arrayBuffer], { type: 'audio/mpeg' });
-    const audioUrl = URL.createObjectURL(audioBlob);
+    const audioUrl = audioArrayToUrl(audio.data);
     console.log(audioUrl);
     setAudioContent(audioUrl);
   }
