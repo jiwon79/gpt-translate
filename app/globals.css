@@ -20,6 +20,7 @@ body {
   display: block;
   max-width: 480px;
   width: 100%;
+  min-height: 100vh;
   align-self: center;
   -webkit-align-self: center;
   background-color: #fff;;
