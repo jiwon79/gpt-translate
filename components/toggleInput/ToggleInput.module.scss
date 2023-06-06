@@ -1,0 +1,65 @@
+.container {
+  display: flex;
+  cursor: pointer;
+  width: min(100%, 480px);
+  box-sizing: border-box;
+  padding: 10px 20px 10px 20px;
+  margin: 0 20px 10px 20px;
+  border-bottom: 1px solid #a2a2a2;
+}
+
+.label {
+  width: 50px;
+  margin-right: 40px;
+}
+
+.input {
+  appearance: none;
+  position: relative;
+  border: max(2px, 0.1em) solid gray;
+  border-radius: 1.25em;
+  width: 2.25em;
+  height: 1.25em;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    transform: scale(0.8);
+    background-color: gray;
+    transition: left 250ms linear;
+  }
+
+  &:checked {
+      background-color: tomato;
+      border-color: tomato;
+
+    &::before {
+        background-color: white;
+        left: 1em;
+    }
+
+    &:focus-visible {
+        outline-offset: max(2px, 0.1em);
+        outline: max(2px, 0.1em) solid tomato;
+    }
+
+    &:enabled {
+      &:hover {
+        box-shadow: 0 0 0 max(4px, 0.2em) lightgray;
+      }
+    }
+  }
+}
+
+//[type="checkbox"]:focus-visible {
+//  outline-offset: max(2px, 0.1em);
+//  outline: max(2px, 0.1em) solid tomato;
+//}
+//
+//[type="checkbox"]:enabled:hover {
+//  box-shadow: 0 0 0 max(4px, 0.2em) lightgray;
+//}
