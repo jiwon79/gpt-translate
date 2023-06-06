@@ -9,7 +9,8 @@ const Home = () => {
       <TextInput label={"장소"} placeholder={'대화가 진행되는 장소를 입력해 주세요.'} />
       <TextInput label={"상황"} placeholder={'대화 상황을 간단히 설명해 주세요.'} />
       <ToggleInput label={"높임말"}/>
-      <button>시작하기</button>
+      <div className={styles.spacer} />
+      <button className={styles.button__start}>시작하기</button>
     </div>
   )
 }
