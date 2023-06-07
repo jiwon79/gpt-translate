@@ -1,9 +1,10 @@
 import { GoogleAuth } from "google-auth-library";
 import { SpeechClient } from "@google-cloud/speech";
 import { google as googleSpeech } from "@google-cloud/speech/build/protos/protos";
-import SpeechAudioEncoding = googleSpeech.cloud.speech.v1.RecognitionConfig.AudioEncoding;
 import { TextToSpeechClient } from "@google-cloud/text-to-speech";
 import { google as googleText } from "@google-cloud/text-to-speech/build/protos/protos";
+import { v2 as googleTranslate } from "@google-cloud/translate";
+import SpeechAudioEncoding = googleSpeech.cloud.speech.v1.RecognitionConfig.AudioEncoding;
 import SsmlVoiceGender = googleText.cloud.texttospeech.v1.SsmlVoiceGender;
 import TextAudioEncoding = googleText.cloud.texttospeech.v1.AudioEncoding;
 
@@ -11,6 +12,7 @@ export class GoogleService {
   private static instance: GoogleService;
   private speechClient: SpeechClient;
   private textClient: TextToSpeechClient;
+  private translateClient: googleTranslate.Translate;
 
   constructor() {
     const speechAuth = new GoogleAuth({
@@ -29,6 +31,13 @@ export class GoogleService {
       },
     });
 
+    const translateAuthClient = {
+        client_id: process.env.GOOGLE_CLIENT_ID || "",
+        client_email: process.env.GOOGLE_CLIENT_EMAIL || "",
+        private_key: (process.env.GOOGLE_PRIVATE_KEY || "").replace(/\\n/g, '\n'),
+      };
+
+    this.translateClient = new googleTranslate.Translate({credentials: translateAuthClient});
     this.speechClient = new SpeechClient({auth: speechAuth});
     this.textClient = new TextToSpeechClient({auth: textAuth});
   }
@@ -80,5 +89,12 @@ export class GoogleService {
     const [response] = await this.textClient.synthesizeSpeech(request);
 
     return response.audioContent;
+  }
+
+  public translate = async (text: string, target: string) => {
+    const [translations] = await this.translateClient.translate(text, target);
+    const translationsArray = Array.isArray(translations) ? translations : [translations];
+
+    return translationsArray.join(' ');
   }
 }
