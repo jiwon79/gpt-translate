@@ -1,0 +1,9 @@
+@import "styles/styleGuide";
+
+.button__wrap {
+  display: flex;
+  width: $screenWidth;
+  padding: 18px;
+  box-sizing: border-box;
+  justify-content: space-between;
+}

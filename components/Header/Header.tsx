@@ -1,5 +1,5 @@
-import styles from "./Header.module.scss"
 import Link from "next/link";
+import styles from "./Header.module.scss"
 
 interface HeaderProps {
   prevLabel: string;
