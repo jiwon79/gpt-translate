@@ -1,6 +1,7 @@
 import styles from "./ToggleInput.module.scss";
+import { InputHTMLAttributes } from "react";
 
-interface ToggleInputProps {
+interface ToggleInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
 }
 
