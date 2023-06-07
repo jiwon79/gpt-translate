@@ -1,5 +1,6 @@
 import './globals.css'
 import { ReactNode } from "react";
+import Recoil from "@/lib/recoil/Recoil";
 
 export const metadata = {
   title: '번역',
@@ -13,7 +14,9 @@ interface RootLayoutProps {
 export default function RootLayout({children}: RootLayoutProps) {
   return (
     <html lang="en">
-    <body>{children}</body>
+    <Recoil>
+      <body>{children}</body>
+    </Recoil>
     </html>
   )
 }
