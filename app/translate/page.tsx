@@ -46,7 +46,7 @@ const TranslatePage = () => {
 
   return (
     <main className={styles.main}>
-      <Header />
+      <Header label={"대화"} prevLabel={"상황 변경"} prevHref={"/"} />
       <h1>녹음 버튼 및 재생</h1>
       <audio controls src={audioURL}>녹음된 소리를 재생할 audio 엘리먼트</audio>
       <audio controls src={audioContent}>TTS</audio>
