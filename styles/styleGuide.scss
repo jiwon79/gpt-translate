@@ -1,0 +1,19 @@
+$screenWidth: min(100vw, 480px);
+$screenHeight: 100svh;
+$grey100: #ffffff;
+$grey150: #F7F8F9;
+$grey250: #E3E6EB;
+$grey650: #494C50;
+$grey700: #3A3D41;
+$grey800: #2B2D30;
+
+:export {
+  scrrenWidth: $screenWidth;
+  screenHeight: $screenHeight;
+  grey100: $grey100;
+  grey150: $grey150;
+  grey250: $grey250;
+  grey650: $grey650;
+  grey700: $grey700;
+  grey800: $grey800;
+}

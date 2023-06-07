@@ -5,6 +5,7 @@ import { useState } from "react";
 import { audioArrayToUrl, blobUrlToBase64 } from "@/lib/utils/function";
 import speechTextAPI from "@/lib/api/speechTextAPI";
 import '@/lib/utils/prototype';
+import Header from "@/components/Header/Header";
 
 const TranslatePage = () => {
   const {audioURL, isRecording, startRecording, stopRecording,} = useRecorder();
@@ -45,6 +46,7 @@ const TranslatePage = () => {
 
   return (
     <main className={styles.main}>
+      <Header />
       <h1>녹음 버튼 및 재생</h1>
       <audio controls src={audioURL}>녹음된 소리를 재생할 audio 엘리먼트</audio>
       <audio controls src={audioContent}>TTS</audio>
