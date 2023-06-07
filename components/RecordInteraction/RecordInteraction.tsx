@@ -2,6 +2,8 @@ import styles from './RecordInteraction.module.scss';
 import useRecorder from "@/lib/hooks/useRecorder";
 import { useState } from "react";
 
+import RecordProcess from "./RecordProcess/RecordProcess";
+
 export enum Language {
   EN = "en",
   KO = "ko",
@@ -20,12 +22,9 @@ const RecordInteraction = () => {
     setCurLanguage(language);
     startRecording();
   }
-  console.log(isRecording);
 
   if (isRecording) return (
-    <div className={styles.button__wrap}>
-      <button onClick={() => stopRecording()}>종료</button>
-    </div>
+    <RecordProcess stopRecording={stopRecording} language={curLanguage} />
   );
 
   return (
