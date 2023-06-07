@@ -13,6 +13,7 @@ const RecordInteraction = () => {
   const {
     audioURL,
     isRecording,
+    stream,
     startRecording,
     stopRecording,
   } = useRecorder();
@@ -24,7 +25,7 @@ const RecordInteraction = () => {
   }
 
   if (isRecording) return (
-    <RecordProcess stopRecording={stopRecording} language={curLanguage} />
+    <RecordProcess stream={stream} stopRecording={stopRecording} language={curLanguage} />
   );
 
   return (
