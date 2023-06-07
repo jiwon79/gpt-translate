@@ -1,6 +1,6 @@
 "use client"
-import TextInput from "@/components/textInput/TextInput";
-import ToggleInput from "@/components/toggleInput/ToggleInput";
+import TextInput from "@/components/TextInput/TextInput";
+import ToggleInput from "@/components/ToggleInput/ToggleInput";
 import styles from './page.module.scss';
 import { useRecoilState } from "recoil";
 import { infoState } from "@/lib/recoil";
