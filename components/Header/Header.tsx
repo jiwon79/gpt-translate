@@ -10,10 +10,10 @@ interface HeaderProps {
 const Header = ({prevLabel, prevHref, label}: HeaderProps) => {
   return (
     <header className={styles.header}>
-      <Link href={prevHref}>
+      <Link href={prevHref} className={styles.label__prev}>
         <p>{prevLabel}</p>
       </Link>
-      <p>{label}</p>
+      <p className={styles.label}>{label}</p>
     </header>
   )
 }
