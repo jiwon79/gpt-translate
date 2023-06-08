@@ -11,6 +11,10 @@ interface TTSResponse extends BasicResponse {
   };
 }
 
+interface TranslateResponse extends BasicResponse {
+  result: string;
+}
+
 const speechTextAPI = {
   stt: async (audio: string): Promise<STTResponse> => request.post(`/api/stt`,
     {audio: audio},
@@ -18,6 +22,9 @@ const speechTextAPI = {
   ),
   tts: async (text: string): Promise<TTSResponse> => request.post(`/api/tts`,
     {text: text},
+  ),
+  translate: async (text: string, lang: string): Promise<TranslateResponse> => request.post(`/api/translate`,
+    {text: text, target: lang},
   ),
 }
 
