@@ -5,14 +5,14 @@ interface Props {
   height?: number;
 }
 
-const Wave: React.FC<Props> = ({ audioData, height }) => {
+const AudioVisualizer: React.FC<Props> = ({ audioData, height }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const draw = () => {
     if (canvasRef.current === null) return;
     const canvas = canvasRef.current;
-    canvas.width = window.innerWidth - 144;
-    canvas.height = window.innerWidth > 599 ? 60 : 32;
+    canvas.width = window.innerWidth > 480 ? 480 : window.innerWidth;
+    canvas.height = 60;
     const { width, height } = canvas;
     let x = 0;
     const sliceWidth = width / audioData.length;
@@ -44,4 +44,5 @@ const Wave: React.FC<Props> = ({ audioData, height }) => {
     <canvas width="940" height={height} ref={canvasRef} />
   );
 };
-export default Wave;
+
+export default AudioVisualizer;

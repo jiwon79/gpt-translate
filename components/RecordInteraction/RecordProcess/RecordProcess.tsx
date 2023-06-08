@@ -1,7 +1,7 @@
 import { Language } from "../RecordInteraction";
 import styles from "./RecordProcess.module.scss";
 import useAnalyser, { AnalyserType } from "@/lib/hooks/useAnalyser";
-import Wave from "./Wave";
+import AudioVisualizer from "./AudioVisualizer";
 
 interface RecordProcessProps {
   stream: MediaStream | null;
@@ -17,7 +17,7 @@ const RecordProcess = ({stream, stopRecording, language}: RecordProcessProps) =>
   return (
     <div className={styles.container}>
       <p>{guideText}</p>
-      <Wave audioData={audioData} />
+      <AudioVisualizer audioData={audioData} />
       <button onClick={() => stopRecording()}>{completeText}</button>
     </div>
   )
