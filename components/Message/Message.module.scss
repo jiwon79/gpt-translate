@@ -1,0 +1,8 @@
+@import "styles/styleGuide";
+
+.container {
+  background-color: $grey250;
+  display: flex;
+  width: 280px;
+  flex-direction: column;
+}
