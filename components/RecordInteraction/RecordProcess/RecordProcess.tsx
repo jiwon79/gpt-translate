@@ -1,7 +1,7 @@
-import { Language } from "../RecordInteraction";
 import styles from "./RecordProcess.module.scss";
 import useAnalyser, { AnalyserType } from "@/lib/hooks/useAnalyser";
 import AudioVisualizer from "./AudioVisualizer";
+import { Language } from "@/lib/utils/constant";
 
 interface RecordProcessProps {
   stream: MediaStream | null;

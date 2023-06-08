@@ -1,2 +1,2 @@
 export { infoState } from "./info";
-export { audioState } from "./audio";
+export { speechState } from "./speech";
