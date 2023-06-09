@@ -1,5 +1,5 @@
 import { speechState, SpeechState } from "@/lib/recoil/speech";
-import styles from './Message.module.scss';
+import styles from './Chat.module.scss';
 import { ChangeEvent, useRef, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { behaviorAtom, BehaviorEnum } from "@/lib/recoil/behavior";
@@ -10,16 +10,16 @@ interface MessageProps {
   speech: SpeechState;
 }
 
-const Message = ({ speech }: MessageProps) => {
+const Chat = ({ speech }: MessageProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const setSpeech = useSetRecoilState(speechState);
   const [text, setText] = useState<string>('');
   const [behavior, setBehavior] = useRecoilState(behaviorAtom);
 
-  const playAudio = () => {
+  const playAudio = async () => {
     if (!audioRef.current) return;
 
-    audioRef.current.play();
+    await audioRef.current.play();
   }
 
   const handleText = (e: ChangeEvent<HTMLInputElement>) => {
@@ -63,4 +63,4 @@ const Message = ({ speech }: MessageProps) => {
   );
 }
 
-export default Message;
+export default Chat;
