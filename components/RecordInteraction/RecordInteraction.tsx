@@ -3,13 +3,14 @@ import useRecorder from "@/lib/hooks/useRecorder";
 import { useEffect, useState } from "react";
 
 import RecordProcess from "./RecordProcess/RecordProcess";
-import { audioArrayToUrl, blobUrlToBase64, reverseLanguage } from "@/lib/utils/function";
+import { audioArrayToUrl, blobUrlToBase64 } from "@/lib/utils/function";
 import speechTextAPI from "@/lib/api/speechTextAPI";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { speechState } from "@/lib/recoil";
 import { Language } from "@/lib/utils/constant";
 import chatAPI from "@/lib/api/chatAPI";
 import Message from "@/app/model/Message";
+import { behaviorAtom, BehaviorEnum } from "@/lib/recoil/behavior";
 
 const RecordInteraction = () => {
   const {
@@ -20,6 +21,7 @@ const RecordInteraction = () => {
     stopRecording,
   } = useRecorder();
   const [curLanguage, setCurLanguage] = useState<Language>(Language.KO);
+  const behavior = useRecoilValue(behaviorAtom);
 
   const handleRecording = (language: Language) => {
     setCurLanguage(language);
@@ -98,17 +100,22 @@ const RecordInteraction = () => {
     handleAudioUrl();
   }, [audioURL]);
 
-  if (isRecording) return (
-    <RecordProcess stream={stream} stopRecording={stopRecording} language={curLanguage}/>
-  );
-
-  return (
-    <div className={styles.button__wrap}>
-      <button onClick={() => handleRecording(Language.EN)}>영어</button>
-      <p>말하려면 누르세요.</p>
-      <button onClick={() => handleRecording(Language.KO)}>한국어</button>
-    </div>
-  );
+  switch (behavior) {
+    case BehaviorEnum.EDIT:
+      return null;
+    case BehaviorEnum.WAIT:
+      return (
+        <div className={styles.button__wrap}>
+          <button onClick={() => handleRecording(Language.EN)}>영어</button>
+          <p>말하려면 누르세요.</p>
+          <button onClick={() => handleRecording(Language.KO)}>한국어</button>
+        </div>
+      );
+    case BehaviorEnum.RECORD:
+      return (
+        <RecordProcess stream={stream} stopRecording={stopRecording} language={curLanguage}/>
+      );
+  }
 }
 
 export default RecordInteraction;

@@ -13,6 +13,6 @@ const initialInfoState = {
 }
 
 export const infoState: RecoilState<InfoState> = atom({
-  key: 'infoState', // unique ID (with respect to other atoms/selectors)
-  default: initialInfoState, // default value (aka initial value)
+  key: 'infoState',
+  default: initialInfoState,
 });
