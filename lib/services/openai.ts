@@ -1,4 +1,4 @@
-import { ChatCompletionResponseMessage, Configuration, CreateChatCompletionResponse, OpenAIApi } from "openai";
+import { Configuration, OpenAIApi } from "openai";
 import type { ChatCompletionRequestMessage } from "openai";
 
 export class ChatGPTService {

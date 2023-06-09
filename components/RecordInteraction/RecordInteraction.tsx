@@ -8,6 +8,8 @@ import speechTextAPI from "@/lib/api/speechTextAPI";
 import { useRecoilState } from "recoil";
 import { speechState } from "@/lib/recoil";
 import { Language } from "@/lib/utils/constant";
+import chatAPI from "@/lib/api/chatAPI";
+import Message from "@/app/model/Message";
 
 const RecordInteraction = () => {
   const {
@@ -36,7 +38,18 @@ const RecordInteraction = () => {
     return response.audioContent;
   }
 
+  const fetchChat = async (text: string) => {
+    const messages = [
+      new Message("system", "너는 번역 전문가야."),
+      new Message("system", "한글을 입력하면 영어로, 영어를 입력하면 한글로 번역해줘."),
+      new Message("user", text),
+    ];
+
+    return await chatAPI.chat(messages);
+  }
+
   const handleAudioUrl = async () => {
+    console.log('handleAudioUrl');
     setSpeech({
       language: curLanguage,
       ttsAudioUrl: "",
@@ -45,16 +58,25 @@ const RecordInteraction = () => {
       reTranslateText: "",
     });
     const result = await fetchSTT();
+    const text = result.translate;
     setSpeech((speech) => {
       return {
         ...speech,
-        text: result.translate,
+        text: text,
       }
     });
-    if (result.translate.isBlank()) {
+    if (text.isBlank()) {
       return;
     }
-    const ttsAudio = await fetchTTS(result.translate);
+    const chatResult = await fetchChat(text);
+    const translateText = chatResult.message.content;
+    setSpeech((speech) => {
+      return {
+        ...speech,
+        translateText: translateText,
+      }
+    });
+    const ttsAudio = await fetchTTS(translateText);
     const ttsAudioUrl = audioArrayToUrl(ttsAudio.data);
     setSpeech((speech) => {
       return {
@@ -62,8 +84,13 @@ const RecordInteraction = () => {
         ttsAudioUrl: ttsAudioUrl,
       }
     });
-    const translateResult = await speechTextAPI.translate(result.translate, reverseLanguage(curLanguage));
-    console.log(translateResult);
+    const reTranslateResponse = await speechTextAPI.translate(translateText, curLanguage);
+    setSpeech((speech) => {
+      return {
+        ...speech,
+        reTranslateText: reTranslateResponse.result
+      }
+    });
   }
 
   useEffect(() => {
