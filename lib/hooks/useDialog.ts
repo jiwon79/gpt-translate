@@ -5,13 +5,19 @@ import { audioArrayToUrl } from "@/lib/utils/function";
 import speechTextAPI from "@/lib/api/speechTextAPI";
 import Message from "@/app/model/Message";
 import chatAPI from "@/lib/api/chatAPI";
+import { useRef } from "react";
 
 const useDialog = () => {
   const [dialogList, setDialogList] = useRecoilState(dialogListAtom)
-  const setLastDialog = (dialog: Dialog) => {
-    const beforeLastDialogList = dialogList.slice(0, dialogList.length - 1);
-    const newDialogList = [...beforeLastDialogList, dialog];
-    setDialogList(newDialogList);
+  const lastDialogRef = useRef<Dialog | null>(null);
+
+  const updateLastDialog = () => {
+    if (lastDialogRef.current === null) return;
+
+    setDialogList((dialogList) => [
+      ...dialogList.slice(0, dialogList.length - 1),
+      lastDialogRef.current!,
+    ]);
   }
 
   const createDialog = (dialog: Dialog) => {
@@ -34,35 +40,37 @@ const useDialog = () => {
       return;
     }
 
-    createDialog({
+    const newDialog = {
       language: language,
       text: text,
       translateText: '',
       reTranslateText: '',
       ttsAudioUrl: '',
-    });
+    };
+    lastDialogRef.current = newDialog;
+    createDialog(newDialog);
 
     const chatResult = await fetchChat(text);
     const translateText = chatResult.message.content;
-
-    setLastDialog({
-      ...dialogList.at(-1)!,
+    lastDialogRef.current = {
+      ...lastDialogRef.current,
       translateText: translateText,
-    });
+    }
+    updateLastDialog();
 
     const ttsResponse = await speechTextAPI.tts(translateText);
-    const ttsAudioUrl = audioArrayToUrl(ttsResponse.audioContent.data);
-
-    setLastDialog({
-      ...dialogList.at(-1)!,
-      ttsAudioUrl: ttsAudioUrl,
-    });
+    lastDialogRef.current = {
+      ...lastDialogRef.current,
+      ttsAudioUrl: audioArrayToUrl(ttsResponse.audioContent.data),
+    }
+    updateLastDialog();
 
     const reTranslateResponse = await speechTextAPI.translate(translateText, language);
-    setLastDialog({
-      ...dialogList.at(-1)!,
+    lastDialogRef.current = {
+      ...lastDialogRef.current,
       reTranslateText: reTranslateResponse.result,
-    });
+    }
+    updateLastDialog();
   }
 
   return {
