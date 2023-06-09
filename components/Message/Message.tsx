@@ -1,6 +1,10 @@
-import { SpeechState } from "@/lib/recoil/speech";
+import { speechState, SpeechState } from "@/lib/recoil/speech";
 import styles from './Message.module.scss';
-import { useRef } from "react";
+import { ChangeEvent, useRef, useState } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { behaviorAtom, BehaviorEnum } from "@/lib/recoil/behavior";
+import { Simulate } from "react-dom/test-utils";
+import input = Simulate.input;
 
 interface MessageProps {
   speech: SpeechState;
@@ -8,11 +12,37 @@ interface MessageProps {
 
 const Message = ({ speech }: MessageProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const setSpeech = useSetRecoilState(speechState);
+  const [text, setText] = useState<string>('');
+  const [behavior, setBehavior] = useRecoilState(behaviorAtom);
 
   const playAudio = () => {
     if (!audioRef.current) return;
 
     audioRef.current.play();
+  }
+
+  const handleText = (e: ChangeEvent<HTMLInputElement>) => {
+    setText(e.target.value);
+  }
+
+  const completeEdit = () => {
+    setSpeech({
+      ...speech,
+      text: text,
+      translateText: "",
+      reTranslateText: "",
+    });
+    setBehavior(BehaviorEnum.WAIT);
+  }
+
+  if (behavior === BehaviorEnum.EDIT) {
+    return (
+      <>
+        <input type="text" onChange={handleText}/>
+        <button onClick={() => completeEdit()}>완료</button>
+      </>
+    )
   }
 
   return (
@@ -24,7 +54,7 @@ const Message = ({ speech }: MessageProps) => {
       </div>
       <audio className={styles.none} src={speech.ttsAudioUrl} ref={audioRef} controls />
       <div>
-        <button>수정</button>
+        <button onClick={() => setBehavior(BehaviorEnum.EDIT)}>수정</button>
         <button>피드백</button>
         <button>삭제</button>
         <button onClick={playAudio}>재생</button>
