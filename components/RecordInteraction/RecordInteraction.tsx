@@ -3,14 +3,16 @@ import useRecorder from "@/lib/hooks/useRecorder";
 import { useEffect, useState } from "react";
 
 import RecordProcess from "./RecordProcess/RecordProcess";
-import { audioArrayToUrl, blobUrlToBase64 } from "@/lib/utils/function";
+import { blobUrlToBase64 } from "@/lib/utils/function";
 import speechTextAPI from "@/lib/api/speechTextAPI";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { speechState } from "@/lib/recoil";
 import { Language } from "@/lib/utils/constant";
 import chatAPI from "@/lib/api/chatAPI";
 import Message from "@/app/model/Message";
 import { behaviorAtom, BehaviorEnum } from "@/lib/recoil/behavior";
+import { Dialog, dialogListAtom } from "@/lib/recoil/dialogList";
+import useDialog from "@/lib/hooks/useDialog";
 
 const RecordInteraction = () => {
   const {
@@ -21,83 +23,29 @@ const RecordInteraction = () => {
     stopRecording,
   } = useRecorder();
   const [curLanguage, setCurLanguage] = useState<Language>(Language.KO);
-  const behavior = useRecoilValue(behaviorAtom);
+  const [behavior, setBehavior] = useRecoilState(behaviorAtom);
+  const { translateText } = useDialog();
 
   const handleRecording = (language: Language) => {
     setCurLanguage(language);
     startRecording();
+    setBehavior(BehaviorEnum.RECORD);
   }
 
-  const [, setSpeech] = useRecoilState(speechState);
-
-  const fetchSTT = async () => {
+  const fetchSTT = async (audioURL: string): Promise<string> => {
     const base64 = await blobUrlToBase64(audioURL);
-    return await speechTextAPI.stt(base64);
-  }
+    const response = await speechTextAPI.stt(base64);
 
-  const fetchTTS = async (text: string) => {
-    const response = await speechTextAPI.tts(text);
-    return response.audioContent;
-  }
-
-  const fetchChat = async (text: string) => {
-    const messages = [
-      new Message("system", "너는 번역 전문가야."),
-      new Message("system", "한글을 입력하면 영어로, 영어를 입력하면 한글로 번역해줘."),
-      new Message("user", text),
-    ];
-
-    return await chatAPI.chat(messages);
-  }
-
-  const handleAudioUrl = async () => {
-    console.log('handleAudioUrl');
-    setSpeech({
-      language: curLanguage,
-      ttsAudioUrl: "",
-      text: "",
-      translateText: "",
-      reTranslateText: "",
-    });
-    const result = await fetchSTT();
-    const text = result.translate;
-    setSpeech((speech) => {
-      return {
-        ...speech,
-        text: text,
-      }
-    });
-    if (text.isBlank()) {
-      return;
-    }
-    const chatResult = await fetchChat(text);
-    const translateText = chatResult.message.content;
-    setSpeech((speech) => {
-      return {
-        ...speech,
-        translateText: translateText,
-      }
-    });
-    const ttsAudio = await fetchTTS(translateText);
-    const ttsAudioUrl = audioArrayToUrl(ttsAudio.data);
-    setSpeech((speech) => {
-      return {
-        ...speech,
-        ttsAudioUrl: ttsAudioUrl,
-      }
-    });
-    const reTranslateResponse = await speechTextAPI.translate(translateText, curLanguage);
-    setSpeech((speech) => {
-      return {
-        ...speech,
-        reTranslateText: reTranslateResponse.result
-      }
-    });
+    return response.translate;
   }
 
   useEffect(() => {
     if (!audioURL) return;
-    handleAudioUrl();
+
+    (async () => {
+      const text = await fetchSTT(audioURL);
+      await translateText(text, curLanguage);
+    })();
   }, [audioURL]);
 
   switch (behavior) {

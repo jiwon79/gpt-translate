@@ -5,12 +5,13 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { behaviorAtom, BehaviorEnum } from "@/lib/recoil/behavior";
 import { Simulate } from "react-dom/test-utils";
 import input = Simulate.input;
+import { Dialog } from "@/lib/recoil/dialogList";
 
 interface MessageProps {
-  speech: SpeechState;
+  dialog: Dialog;
 }
 
-const Chat = ({ speech }: MessageProps) => {
+const Chat = ({ dialog }: MessageProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const setSpeech = useSetRecoilState(speechState);
   const [text, setText] = useState<string>('');
@@ -26,21 +27,21 @@ const Chat = ({ speech }: MessageProps) => {
     setText(e.target.value);
   }
 
-  const completeEdit = () => {
-    setSpeech({
-      ...speech,
-      text: text,
-      translateText: "",
-      reTranslateText: "",
-    });
-    setBehavior(BehaviorEnum.WAIT);
-  }
+  // const completeEdit = () => {
+  //   setSpeech({
+  //     ...speech,
+  //     text: text,
+  //     translateText: "",
+  //     reTranslateText: "",
+  //   });
+  //   setBehavior(BehaviorEnum.WAIT);
+  // }
 
   if (behavior === BehaviorEnum.EDIT) {
     return (
       <>
         <input type="text" onChange={handleText}/>
-        <button onClick={() => completeEdit()}>완료</button>
+        {/*<button onClick={() => completeEdit()}>완료</button>*/}
       </>
     )
   }
@@ -48,11 +49,11 @@ const Chat = ({ speech }: MessageProps) => {
   return (
     <div>
       <div className={styles.container}>
-        <p>{speech.text == '' ? 'loading' : speech.text}</p>
-        <p>{speech.translateText === '' ? 'loading' : speech.translateText}</p>
-        <p>{speech.reTranslateText === '' ? 'loading' : speech.reTranslateText}</p>
+        <p>{dialog.text == '' ? 'loading' : dialog.text}</p>
+        <p>{dialog.translateText === '' ? 'loading' : dialog.translateText}</p>
+        <p>{dialog.reTranslateText === '' ? 'loading' : dialog.reTranslateText}</p>
       </div>
-      <audio className={styles.none} src={speech.ttsAudioUrl} ref={audioRef} controls />
+      <audio className={styles.none} src={dialog.ttsAudioUrl} ref={audioRef} controls />
       <div>
         <button onClick={() => setBehavior(BehaviorEnum.EDIT)}>수정</button>
         <button>피드백</button>
