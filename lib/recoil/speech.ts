@@ -2,15 +2,17 @@ import { atom, RecoilState } from "recoil";
 import { Language } from "@/lib/utils/constant";
 
 export interface SpeechState {
-  audioUrl: string;
   text: string;
+  translateText: string;
+  reTranslateText: string;
   ttsAudioUrl: string;
   language: Language;
 }
 
 const initialSpeechState = {
-  audioUrl: '',
   text: '',
+  translateText: '',
+  reTranslateText: '',
   ttsAudioUrl: '',
   language: Language.EN,
 }

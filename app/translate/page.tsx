@@ -5,6 +5,7 @@ import Header from "@/components/Header/Header";
 import RecordInteraction from "@/components/RecordInteraction/RecordInteraction";
 import { speechState } from "@/lib/recoil";
 import { useRecoilState } from "recoil";
+import Message from "@/components/Message/Message";
 
 const TranslatePage = () => {
   const [speech, setSpeech] = useRecoilState(speechState);
@@ -13,8 +14,7 @@ const TranslatePage = () => {
     <>
       <Header label={"대화"} prevLabel={"상황 변경"} prevHref={"/"} />
       <main className={styles.main}>
-        <p>{JSON.stringify(speech)}</p>
-
+        <Message speech={speech} />
         <RecordInteraction />
       </main>
     </>

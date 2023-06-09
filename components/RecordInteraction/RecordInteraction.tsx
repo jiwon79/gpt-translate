@@ -3,7 +3,7 @@ import useRecorder from "@/lib/hooks/useRecorder";
 import { useEffect, useState } from "react";
 
 import RecordProcess from "./RecordProcess/RecordProcess";
-import { audioArrayToUrl, blobUrlToBase64 } from "@/lib/utils/function";
+import { audioArrayToUrl, blobUrlToBase64, reverseLanguage } from "@/lib/utils/function";
 import speechTextAPI from "@/lib/api/speechTextAPI";
 import { useRecoilState } from "recoil";
 import { speechState } from "@/lib/recoil";
@@ -37,12 +37,12 @@ const RecordInteraction = () => {
   }
 
   const handleAudioUrl = async () => {
-    setSpeech((speech) => {
-      return {
-        ...speech,
-        audioUrl: audioURL,
-        language: curLanguage,
-      }
+    setSpeech({
+      language: curLanguage,
+      ttsAudioUrl: "",
+      text: "",
+      translateText: "",
+      reTranslateText: "",
     });
     const result = await fetchSTT();
     setSpeech((speech) => {
@@ -62,6 +62,8 @@ const RecordInteraction = () => {
         ttsAudioUrl: ttsAudioUrl,
       }
     });
+    const translateResult = await speechTextAPI.translate(result.translate, reverseLanguage(curLanguage));
+    console.log(translateResult);
   }
 
   useEffect(() => {

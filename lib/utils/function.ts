@@ -1,3 +1,5 @@
+import { Language } from "@/lib/utils/constant";
+
 export const blobUrlToBase64 = async (blobUrl: string): Promise<string> => {
   const response = await fetch(blobUrl);
   const data = await response.blob();
@@ -23,4 +25,13 @@ export const audioArrayToUrl = (audioArray: number[]): string => {
   const audioBlob = new Blob([arrayBuffer], { type: 'audio/mpeg' });
 
   return URL.createObjectURL(audioBlob);
+}
+
+export const reverseLanguage = (lang: Language): Language => {
+  switch (lang) {
+    case Language.EN:
+      return Language.KO;
+    case Language.KO:
+      return Language.EN;
+  }
 }
