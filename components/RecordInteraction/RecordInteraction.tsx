@@ -4,20 +4,15 @@ import { useEffect, useState } from "react";
 
 import RecordProcess from "./RecordProcess/RecordProcess";
 import { blobUrlToBase64 } from "@/lib/utils/function";
-import speechTextAPI from "@/lib/api/speechTextAPI";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { speechState } from "@/lib/recoil";
+import { useRecoilState } from "recoil";
 import { Language } from "@/lib/utils/constant";
-import chatAPI from "@/lib/api/chatAPI";
-import Message from "@/app/model/Message";
+import speechTextAPI from "@/lib/api/speechTextAPI";
 import { behaviorAtom, BehaviorEnum } from "@/lib/recoil/behavior";
-import { Dialog, dialogListAtom } from "@/lib/recoil/dialogList";
 import useDialog from "@/lib/hooks/useDialog";
 
 const RecordInteraction = () => {
   const {
     audioURL,
-    isRecording,
     stream,
     startRecording,
     stopRecording,
