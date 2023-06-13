@@ -13,7 +13,6 @@ interface MessageProps {
 
 const Chat = ({ dialog }: MessageProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const setSpeech = useSetRecoilState(speechState);
   const [text, setText] = useState<string>('');
   const [behavior, setBehavior] = useRecoilState(behaviorAtom);
 
