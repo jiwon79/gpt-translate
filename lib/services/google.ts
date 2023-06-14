@@ -8,6 +8,7 @@ import SpeechAudioEncoding = googleSpeech.cloud.speech.v1.RecognitionConfig.Audi
 import SsmlVoiceGender = googleText.cloud.texttospeech.v1.SsmlVoiceGender;
 import TextAudioEncoding = googleText.cloud.texttospeech.v1.AudioEncoding;
 import { Language } from "@/lib/utils/constant";
+import { getLanguageCode } from "@/lib/utils/function";
 
 export class GoogleService {
   private static instance: GoogleService;
@@ -33,10 +34,10 @@ export class GoogleService {
     });
 
     const translateAuthClient = {
-        client_id: process.env.GOOGLE_CLIENT_ID || "",
-        client_email: process.env.GOOGLE_CLIENT_EMAIL || "",
-        private_key: (process.env.GOOGLE_PRIVATE_KEY || "").replace(/\\n/g, '\n'),
-      };
+      client_id: process.env.GOOGLE_CLIENT_ID || "",
+      client_email: process.env.GOOGLE_CLIENT_EMAIL || "",
+      private_key: (process.env.GOOGLE_PRIVATE_KEY || "").replace(/\\n/g, '\n'),
+    };
 
     this.translateClient = new googleTranslate.Translate({credentials: translateAuthClient});
     this.speechClient = new SpeechClient({auth: speechAuth});
@@ -57,12 +58,10 @@ export class GoogleService {
       content: audioBase64,
     }
 
-    const languageCode = language === Language.KO ? 'ko-KR' : 'en-US';
-
     const config = {
       encoding: SpeechAudioEncoding.WEBM_OPUS,
       sampleRateHertz: 48000,
-      languageCode: languageCode,
+      languageCode: getLanguageCode(language),
     }
 
     const googleRequest = {
@@ -82,10 +81,13 @@ export class GoogleService {
       .join('\n');
   }
 
-  public textToSpeech = async (text: string) => {
+  public textToSpeech = async (text: string, language: Language) => {
     const request = {
       input: {text: text},
-      voice: {languageCode: 'en-US', ssmlGender: SsmlVoiceGender.NEUTRAL},
+      voice: {
+        languageCode: getLanguageCode(language),
+        ssmlGender: SsmlVoiceGender.SSML_VOICE_GENDER_UNSPECIFIED,
+      },
       audioConfig: {audioEncoding: TextAudioEncoding.MP3},
     };
 

@@ -1,7 +1,7 @@
 import { Dialog, dialogListAtom } from "@/lib/recoil/dialogList";
 import { useRecoilState } from "recoil";
 import { Language } from "@/lib/utils/constant";
-import { audioArrayToUrl } from "@/lib/utils/function";
+import { audioArrayToUrl, reverseLanguage } from "@/lib/utils/function";
 import speechTextAPI from "@/lib/api/speechTextAPI";
 import Message from "@/app/model/Message";
 import chatAPI from "@/lib/api/chatAPI";
@@ -54,6 +54,7 @@ const useDialog = () => {
     }
     if (lastDialogRef.current == null) return;
     const language = lastDialogRef.current.language;
+    const reversedLanguage = reverseLanguage(language);
     lastDialogRef.current = {
       ...lastDialogRef.current,
       text: text,
@@ -68,7 +69,7 @@ const useDialog = () => {
     }
     updateLastDialog();
 
-    const ttsResponse = await speechTextAPI.tts(translateText);
+    const ttsResponse = await speechTextAPI.tts(translateText, reversedLanguage);
     lastDialogRef.current = {
       ...lastDialogRef.current,
       ttsAudioUrl: audioArrayToUrl(ttsResponse.audioContent.data),

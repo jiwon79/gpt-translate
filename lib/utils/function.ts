@@ -35,3 +35,12 @@ export const reverseLanguage = (lang: Language): Language => {
       return Language.EN;
   }
 }
+
+export const getLanguageCode = (lang: Language): string => {
+  switch (lang) {
+    case Language.EN:
+      return "en-US";
+    case Language.KO:
+      return "ko-KR";
+  }
+}
