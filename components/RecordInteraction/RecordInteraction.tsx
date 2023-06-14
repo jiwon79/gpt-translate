@@ -19,7 +19,7 @@ const RecordInteraction = () => {
   } = useRecorder();
   const [curLanguage, setCurLanguage] = useState<Language>(Language.KO);
   const [behavior, setBehavior] = useRecoilState(behaviorAtom);
-  const { translateText } = useDialog();
+  const { translateText, createEmptyDialog } = useDialog();
 
   const handleRecording = (language: Language) => {
     setCurLanguage(language);
@@ -38,8 +38,9 @@ const RecordInteraction = () => {
     if (!audioURL) return;
 
     (async () => {
+      createEmptyDialog(curLanguage);
       const text = await fetchSTT(audioURL);
-      await translateText(text, curLanguage);
+      await translateText(text);
     })();
   }, [audioURL]);
 

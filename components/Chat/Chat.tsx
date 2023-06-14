@@ -1,4 +1,3 @@
-import { speechState, SpeechState } from "@/lib/recoil/speech";
 import styles from './Chat.module.scss';
 import { ChangeEvent, useRef, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";

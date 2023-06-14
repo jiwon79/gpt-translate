@@ -25,6 +25,19 @@ const useDialog = () => {
     setDialogList(newDialogList);
   }
 
+  const createEmptyDialog = (language : Language) => {
+    const newDialog = {
+      language: language,
+      text: '',
+      translateText: '',
+      reTranslateText: '',
+      ttsAudioUrl: '',
+    }
+    lastDialogRef.current = newDialog;
+
+    createDialog(newDialog);
+  }
+
   const fetchChat = async (text: string) => {
     const messages = [
       new Message("system", "너는 번역 전문가야."),
@@ -35,20 +48,17 @@ const useDialog = () => {
     return await chatAPI.chat(messages);
   }
 
-  const translateText = async (text: string, language: Language) => {
+  const translateText = async (text: string) => {
     if (text.isBlank()) {
       return;
     }
-
-    const newDialog = {
-      language: language,
+    if (lastDialogRef.current == null) return;
+    const language = lastDialogRef.current.language;
+    lastDialogRef.current = {
+      ...lastDialogRef.current,
       text: text,
-      translateText: '',
-      reTranslateText: '',
-      ttsAudioUrl: '',
-    };
-    lastDialogRef.current = newDialog;
-    createDialog(newDialog);
+    }
+    updateLastDialog();
 
     const chatResult = await fetchChat(text);
     const translateText = chatResult.message.content;
@@ -74,6 +84,7 @@ const useDialog = () => {
   }
 
   return {
+    createEmptyDialog: createEmptyDialog,
     translateText: translateText,
   }
 }
