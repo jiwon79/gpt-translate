@@ -12,12 +12,11 @@ interface MessageProps {
   isLastChat: boolean;
 }
 
-const Chat = ({ dialog, isLastChat }: MessageProps) => {
+const Chat = ({dialog, isLastChat}: MessageProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const textRef = useRef<string>('');
   const [text, setText] = useState<string>('');
   const [behavior, setBehavior] = useRecoilState(behaviorAtom);
-  const { editLastDialog } = useDialog();
+  const {dialogList, editLastDialog} = useDialog();
 
   const playAudio = async () => {
     if (!audioRef.current) return;
@@ -27,19 +26,22 @@ const Chat = ({ dialog, isLastChat }: MessageProps) => {
 
   const handleText = (e: ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
-    textRef.current = e.target.value;
+  }
+
+  const onTapEditButton = () => {
+    setText(dialogList[dialogList.length - 1].text);
+    setBehavior(BehaviorEnum.EDIT);
   }
 
   const completeEdit = () => {
-    console.log('completeEdit', textRef.current);
-    editLastDialog(textRef.current);
+    editLastDialog(text);
     setBehavior(BehaviorEnum.WAIT);
   }
 
   if (behavior === BehaviorEnum.EDIT && isLastChat) {
     return (
       <>
-        <input type="text" onChange={handleText}/>
+        <input type="text" onChange={handleText} value={text} />
         <button onClick={() => completeEdit()}>완료</button>
       </>
     )
@@ -52,13 +54,15 @@ const Chat = ({ dialog, isLastChat }: MessageProps) => {
         <p>{dialog.translateText === '' ? 'loading' : dialog.translateText}</p>
         <p>{dialog.reTranslateText === '' ? 'loading' : dialog.reTranslateText}</p>
       </div>
-      <audio className={styles.none} src={dialog.ttsAudioUrl} ref={audioRef} controls />
-      <div>
-        <button onClick={() => setBehavior(BehaviorEnum.EDIT)}>수정</button>
-        <button>피드백</button>
-        <button>삭제</button>
-        <button onClick={playAudio}>재생</button>
-      </div>
+      <audio className={styles.none} src={dialog.ttsAudioUrl} ref={audioRef} controls/>
+      {isLastChat
+        ? <div>
+            <button onClick={() => onTapEditButton()}>수정</button>
+            <button>피드백</button>
+            <button>삭제</button>
+            <button onClick={playAudio}>재생</button>
+          </div>
+        : <></>}
     </div>
   );
 }

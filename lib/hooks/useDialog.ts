@@ -99,6 +99,7 @@ const useDialog = () => {
   }
 
   return {
+    dialogList: dialogList,
     createEmptyDialog: createEmptyDialog,
     translateText: translateText,
     editLastDialog: editLastDialog,
