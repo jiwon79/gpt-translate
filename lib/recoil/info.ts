@@ -1,18 +1,18 @@
 import { atom, RecoilState } from "recoil";
 
-export interface InfoState {
+export interface Info {
   place: string;
   situation: string;
   isPolite: boolean;
 }
 
-const initialInfoState = {
+const initialInfo = {
   place: '',
   situation: '',
   isPolite: false,
 }
 
-export const infoState: RecoilState<InfoState> = atom({
-  key: 'infoState',
-  default: initialInfoState,
+export const infoAtom: RecoilState<Info> = atom({
+  key: 'info',
+  default: initialInfo,
 });

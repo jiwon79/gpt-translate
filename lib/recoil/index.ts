@@ -1,2 +1,3 @@
-export { infoState } from "./info";
-export { speechState } from "./speech";
+export { infoAtom } from "./info";
+export { behaviorAtom } from "./behavior";
+export { dialogListAtom } from "./dialogList";
