@@ -11,7 +11,7 @@ const useDialog = () => {
   const [dialogList, setDialogList] = useRecoilState(dialogListAtom)
   const lastDialogRef = useRef<Dialog | null>(null);
 
-  const updateLastDialog = () => {
+  const _updateLastDialog = () => {
     if (lastDialogRef.current === null) return;
 
     setDialogList((dialogList) => [
@@ -20,7 +20,7 @@ const useDialog = () => {
     ]);
   }
 
-  const createDialog = (dialog: Dialog) => {
+  const _createDialog = (dialog: Dialog) => {
     const newDialogList = [...dialogList, dialog];
     setDialogList(newDialogList);
   }
@@ -35,7 +35,21 @@ const useDialog = () => {
     }
     lastDialogRef.current = newDialog;
 
-    createDialog(newDialog);
+    _createDialog(newDialog);
+  }
+
+  const editLastDialog = (text: string) => {
+    if (dialogList.length === 0) return;
+    lastDialogRef.current = dialogList[dialogList.length - 1];
+    lastDialogRef.current = {
+      ...lastDialogRef.current,
+      text: text,
+      translateText: '',
+      reTranslateText: '',
+      ttsAudioUrl: '',
+    }
+    _updateLastDialog();
+    translateText(text);
   }
 
   const fetchChat = async (text: string) => {
@@ -59,7 +73,7 @@ const useDialog = () => {
       ...lastDialogRef.current,
       text: text,
     }
-    updateLastDialog();
+    _updateLastDialog();
 
     const chatResult = await fetchChat(text);
     const translateText = chatResult.message.content;
@@ -67,26 +81,27 @@ const useDialog = () => {
       ...lastDialogRef.current,
       translateText: translateText,
     }
-    updateLastDialog();
+    _updateLastDialog();
 
     const ttsResponse = await speechTextAPI.tts(translateText, reversedLanguage);
     lastDialogRef.current = {
       ...lastDialogRef.current,
       ttsAudioUrl: audioArrayToUrl(ttsResponse.audioContent.data),
     }
-    updateLastDialog();
+    _updateLastDialog();
 
     const reTranslateResponse = await speechTextAPI.translate(translateText, language);
     lastDialogRef.current = {
       ...lastDialogRef.current,
       reTranslateText: reTranslateResponse.result,
     }
-    updateLastDialog();
+    _updateLastDialog();
   }
 
   return {
     createEmptyDialog: createEmptyDialog,
     translateText: translateText,
+    editLastDialog: editLastDialog,
   }
 }
 

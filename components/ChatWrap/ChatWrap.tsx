@@ -9,7 +9,11 @@ const ChatWrap = () => {
   return (
     <div>
       {dialogList.map((dialog, index) => (
-        <Chat key={index} dialog={dialog} />
+        <Chat
+          key={index}
+          dialog={dialog}
+          isLastChat={index === dialogList.length - 1}
+        />
       ))}
     </div>
   );

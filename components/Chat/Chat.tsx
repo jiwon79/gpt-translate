@@ -5,15 +5,19 @@ import { behaviorAtom, BehaviorEnum } from "@/lib/recoil/behavior";
 import { Simulate } from "react-dom/test-utils";
 import input = Simulate.input;
 import { Dialog } from "@/lib/recoil/dialogList";
+import useDialog from "@/lib/hooks/useDialog";
 
 interface MessageProps {
   dialog: Dialog;
+  isLastChat: boolean;
 }
 
-const Chat = ({ dialog }: MessageProps) => {
+const Chat = ({ dialog, isLastChat }: MessageProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const textRef = useRef<string>('');
   const [text, setText] = useState<string>('');
   const [behavior, setBehavior] = useRecoilState(behaviorAtom);
+  const { editLastDialog } = useDialog();
 
   const playAudio = async () => {
     if (!audioRef.current) return;
@@ -23,23 +27,20 @@ const Chat = ({ dialog }: MessageProps) => {
 
   const handleText = (e: ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
+    textRef.current = e.target.value;
   }
 
-  // const completeEdit = () => {
-  //   setSpeech({
-  //     ...speech,
-  //     text: text,
-  //     translateText: "",
-  //     reTranslateText: "",
-  //   });
-  //   setBehavior(BehaviorEnum.WAIT);
-  // }
+  const completeEdit = () => {
+    console.log('completeEdit', textRef.current);
+    editLastDialog(textRef.current);
+    setBehavior(BehaviorEnum.WAIT);
+  }
 
-  if (behavior === BehaviorEnum.EDIT) {
+  if (behavior === BehaviorEnum.EDIT && isLastChat) {
     return (
       <>
         <input type="text" onChange={handleText}/>
-        {/*<button onClick={() => completeEdit()}>완료</button>*/}
+        <button onClick={() => completeEdit()}>완료</button>
       </>
     )
   }
