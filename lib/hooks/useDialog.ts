@@ -6,10 +6,12 @@ import speechTextAPI from "@/lib/api/speechTextAPI";
 import Message from "@/lib/model/Message";
 import chatAPI from "@/lib/api/chatAPI";
 import { useRef } from "react";
+import useGptTranslate from "@/lib/hooks/useGptTranslate";
 
 const useDialog = () => {
   const [dialogList, setDialogList] = useRecoilState(dialogListAtom)
   const lastDialogRef = useRef<Dialog | null>(null);
+  const { translateUsingGpt } = useGptTranslate();
 
   const _updateLastDialog = () => {
     if (lastDialogRef.current === null) return;
@@ -96,8 +98,7 @@ const useDialog = () => {
     }
     _updateLastDialog();
 
-    const chatResult = await fetchChat(text);
-    const translateText = chatResult.message.content;
+    const translateText = await translateUsingGpt(text);
     lastDialogRef.current = {
       ...lastDialogRef.current,
       translateText: translateText,

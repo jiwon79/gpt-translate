@@ -1,11 +1,11 @@
-import styles from './Chat.module.scss';
 import { ChangeEvent, useRef, useState } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { behaviorAtom, BehaviorEnum } from "@/lib/recoil/behavior";
-import { Simulate } from "react-dom/test-utils";
-import input = Simulate.input;
-import { Dialog } from "@/lib/recoil/dialogList";
+import { useRecoilState } from "recoil";
+import { useRouter } from "next/navigation";
+
 import useDialog from "@/lib/hooks/useDialog";
+import { Dialog } from "@/lib/recoil/dialogList";
+import { behaviorAtom, BehaviorEnum } from "@/lib/recoil/behavior";
+import styles from './Chat.module.scss';
 
 interface MessageProps {
   dialog: Dialog;
@@ -13,6 +13,7 @@ interface MessageProps {
 }
 
 const Chat = ({dialog, isLastChat}: MessageProps) => {
+  const router = useRouter();
   const audioRef = useRef<HTMLAudioElement>(null);
   const [text, setText] = useState<string>('');
   const [behavior, setBehavior] = useRecoilState(behaviorAtom);
@@ -38,6 +39,10 @@ const Chat = ({dialog, isLastChat}: MessageProps) => {
     setBehavior(BehaviorEnum.WAIT);
   }
 
+  const onTapFeedbackButton = () => {
+    router.push("/translate/feedback");
+  }
+
   if (behavior === BehaviorEnum.EDIT && isLastChat) {
     return (
       <>
@@ -57,9 +62,9 @@ const Chat = ({dialog, isLastChat}: MessageProps) => {
       <audio className={styles.none} src={dialog.ttsAudioUrl} ref={audioRef} controls/>
       {isLastChat
         ? <div>
-            <button onClick={() => onTapEditButton()}>수정</button>
-            <button>피드백</button>
-            <button onClick={() => deleteLastDialog()}>삭제</button>
+            <button onClick={onTapEditButton}>수정</button>
+            <button onClick={onTapFeedbackButton}>피드백</button>
+            <button onClick={deleteLastDialog}>삭제</button>
             <button onClick={playAudio}>재생</button>
           </div>
         : <></>}
