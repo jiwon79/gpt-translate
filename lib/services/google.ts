@@ -96,7 +96,7 @@ export class GoogleService {
     return response.audioContent;
   }
 
-  public translate = async (text: string, target: string) => {
+  public translate = async (text: string, target: Language) => {
     const [translations] = await this.translateClient.translate(text, target);
     const translationsArray = Array.isArray(translations) ? translations : [translations];
 

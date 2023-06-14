@@ -24,8 +24,8 @@ const speechTextAPI = {
   tts: async (text: string, language: Language): Promise<TTSResponse> => request.post(`/api/tts`,
     {text: text, language: language},
   ),
-  translate: async (text: string, lang: string): Promise<TranslateResponse> => request.post(`/api/translate`,
-    {text: text, target: lang},
+  translate: async (text: string, language: Language): Promise<TranslateResponse> => request.post(`/api/translate`,
+    {text: text, language: language},
   ),
 }
 
