@@ -7,6 +7,7 @@ import { v2 as googleTranslate } from "@google-cloud/translate";
 import SpeechAudioEncoding = googleSpeech.cloud.speech.v1.RecognitionConfig.AudioEncoding;
 import SsmlVoiceGender = googleText.cloud.texttospeech.v1.SsmlVoiceGender;
 import TextAudioEncoding = googleText.cloud.texttospeech.v1.AudioEncoding;
+import { Language } from "@/lib/utils/constant";
 
 export class GoogleService {
   private static instance: GoogleService;
@@ -51,15 +52,17 @@ export class GoogleService {
   }
 
   /// param: audioBase64(base64): string
-  public recognize = async (audioBase64: string): Promise<string> => {
+  public recognize = async (audioBase64: string, language: Language): Promise<string> => {
     const audio = {
       content: audioBase64,
     }
 
+    const languageCode = language === Language.KO ? 'ko-KR' : 'en-US';
+
     const config = {
       encoding: SpeechAudioEncoding.WEBM_OPUS,
       sampleRateHertz: 48000,
-      languageCode: 'ko-KR',
+      languageCode: languageCode,
     }
 
     const googleRequest = {

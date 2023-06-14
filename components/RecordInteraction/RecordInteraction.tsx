@@ -29,7 +29,7 @@ const RecordInteraction = () => {
 
   const fetchSTT = async (audioURL: string): Promise<string> => {
     const base64 = await blobUrlToBase64(audioURL);
-    const response = await speechTextAPI.stt(base64);
+    const response = await speechTextAPI.stt(base64, curLanguage);
 
     return response.translate;
   }

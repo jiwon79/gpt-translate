@@ -1,4 +1,5 @@
 import request, { BasicResponse } from "./index";
+import { Language } from "@/lib/utils/constant";
 
 interface STTResponse extends BasicResponse {
   translate: string;
@@ -16,8 +17,8 @@ interface TranslateResponse extends BasicResponse {
 }
 
 const speechTextAPI = {
-  stt: async (audio: string): Promise<STTResponse> => request.post(`/api/stt`,
-    {audio: audio},
+  stt: async (audio: string, language: Language): Promise<STTResponse> => request.post(`/api/stt`,
+    {audio: audio, language: language},
     {'Content-Type': 'application/pdf'},
   ),
   tts: async (text: string): Promise<TTSResponse> => request.post(`/api/tts`,
