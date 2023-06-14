@@ -70,11 +70,25 @@ const useDialog = () => {
   }
 
   const translateText = async (text: string) => {
-    if (text.isBlank()) {
-      return;
-    }
     if (lastDialogRef.current == null) return;
     const language = lastDialogRef.current.language;
+
+    if (text.isBlank()) {
+      console.log('음성인식 실패');
+      const failText = language === Language.KO
+        ? '음성인식 실패'
+        : 'Speech recognition failed.';
+      lastDialogRef.current = {
+        ...lastDialogRef.current,
+        text: failText,
+        translateText: ' ',
+        reTranslateText: ' ',
+        ttsAudioUrl: ' ',
+      }
+      _updateLastDialog();
+      return;
+    }
+
     const reversedLanguage = reverseLanguage(language);
     lastDialogRef.current = {
       ...lastDialogRef.current,
