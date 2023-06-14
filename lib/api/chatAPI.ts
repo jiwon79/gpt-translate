@@ -1,5 +1,5 @@
 import request, { BasicResponse } from "./index";
-import Message from "@/app/model/Message";
+import Message from "@/lib/model/Message";
 
 interface ChatResponse extends BasicResponse {
   message: Message,

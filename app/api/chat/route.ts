@@ -1,6 +1,6 @@
 import { ChatCompletionRequestMessage } from "openai";
 import { ChatGPTService } from "@/lib/services/openai";
-import Message from "@/app/model/Message";
+import Message from "@/lib/model/Message";
 
 interface IRequest extends Request {
   json: () => Promise<{

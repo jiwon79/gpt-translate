@@ -3,7 +3,7 @@ import { useRecoilState } from "recoil";
 import { Language } from "@/lib/utils/constant";
 import { audioArrayToUrl, reverseLanguage } from "@/lib/utils/function";
 import speechTextAPI from "@/lib/api/speechTextAPI";
-import Message from "@/app/model/Message";
+import Message from "@/lib/model/Message";
 import chatAPI from "@/lib/api/chatAPI";
 import { useRef } from "react";
 
