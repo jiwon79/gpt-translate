@@ -52,6 +52,13 @@ const useDialog = () => {
     translateText(text);
   }
 
+  const deleteLastDialog = () => {
+    if (dialogList.length === 0) return;
+    const newDialogList = dialogList.slice(0, dialogList.length - 1);
+    setDialogList(newDialogList);
+    lastDialogRef.current = null;
+  }
+
   const fetchChat = async (text: string) => {
     const messages = [
       new Message("system", "너는 번역 전문가야."),
@@ -103,6 +110,7 @@ const useDialog = () => {
     createEmptyDialog: createEmptyDialog,
     translateText: translateText,
     editLastDialog: editLastDialog,
+    deleteLastDialog: deleteLastDialog,
   }
 }
 

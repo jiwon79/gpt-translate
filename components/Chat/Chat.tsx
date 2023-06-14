@@ -16,7 +16,7 @@ const Chat = ({dialog, isLastChat}: MessageProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [text, setText] = useState<string>('');
   const [behavior, setBehavior] = useRecoilState(behaviorAtom);
-  const {dialogList, editLastDialog} = useDialog();
+  const {dialogList, editLastDialog, deleteLastDialog} = useDialog();
 
   const playAudio = async () => {
     if (!audioRef.current) return;
@@ -59,7 +59,7 @@ const Chat = ({dialog, isLastChat}: MessageProps) => {
         ? <div>
             <button onClick={() => onTapEditButton()}>수정</button>
             <button>피드백</button>
-            <button>삭제</button>
+            <button onClick={() => deleteLastDialog()}>삭제</button>
             <button onClick={playAudio}>재생</button>
           </div>
         : <></>}
