@@ -10,6 +10,7 @@ import useDialog from "@/lib/hooks/useDialog";
 import { useRouter } from "next/navigation";
 import { Language } from "@/lib/utils/constant";
 import { Dialog } from "@/lib/recoil/dialogList";
+import styles from './page.module.scss';
 
 interface AlternativeTranslate {
   translateText: string;
@@ -101,14 +102,16 @@ const FeedbackPage = () => {
       <Header/>
       <p>{text}</p>
       <p>{language}</p>
-      {alternativeTranslates.map((alternativeTranslate, index) => {
-        return (
-          <div key={index}>
-            <p>{alternativeTranslate.translateText}</p>
-            <p>{alternativeTranslate.reTranslateText}</p>
-          </div>
-        )
-      })}
+      <div className={styles.alternative__wrap}>
+        {alternativeTranslates.map((alternativeTranslate, index) => {
+          return (
+            <div key={index} className={styles.alternative}>
+              <p>{alternativeTranslate.translateText}</p>
+              <p>{alternativeTranslate.reTranslateText}</p>
+            </div>
+          )
+        })}
+      </div>
       <p>이런 번역은 어떠세요?</p>
       <p>번역 요청 사항 입력하기</p>
       <input type="text" value={feedBackText} onChange={handleFeedbackText} />
