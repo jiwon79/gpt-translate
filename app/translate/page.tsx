@@ -9,7 +9,7 @@ import styles from './page.module.scss';
 const TranslatePage = () => {
   return (
     <>
-      <Header label={"대화"} prevLabel={"상황 변경"} prevHref={"/"} />
+      <Header />
       <main className={styles.main}>
         <ChatWrap />
         <RecordInteraction />

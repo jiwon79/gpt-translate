@@ -1,3 +1,4 @@
+"use client"
 import styles from './RecordInteraction.module.scss';
 import useRecorder from "@/lib/hooks/useRecorder";
 import { useEffect, useState } from "react";
@@ -48,7 +49,7 @@ const RecordInteraction = () => {
 
   switch (behavior) {
     case BehaviorEnum.EDIT:
-      return null;
+      return <></>;
     case BehaviorEnum.WAIT:
       return (
         <div className={styles.button__wrap}>
@@ -63,6 +64,8 @@ const RecordInteraction = () => {
       return (
         <RecordInterface stream={stream} stopRecording={stopRecording} language={curLanguage}/>
       );
+    default:
+      return <></>;
   }
 }
 

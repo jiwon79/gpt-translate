@@ -1,21 +1,20 @@
 import Link from "next/link";
-import styles from "./Header.module.scss"
+import { useRecoilValue } from "recoil";
+
 import BackIcon from "@/components/Svg/BackIcon";
+import { headerAtom } from "@/lib/recoil";
 
-interface HeaderProps {
-  prevLabel: string;
-  prevHref: string;
-  label: string;
-}
+import styles from "./Header.module.scss"
 
-const Header = ({prevLabel, prevHref, label}: HeaderProps) => {
+const Header = () => {
+  const header = useRecoilValue(headerAtom);
+
   return (
     <header className={styles.header}>
-      <Link href={prevHref} className={styles.label__prev}>
+      <Link href={header.prevHref} className={styles.link}>
         <BackIcon color={"#2e2e2e"} className={styles.icon__back} />
-        <p>{prevLabel}</p>
+        <p className={styles.label}>{header.label}</p>
       </Link>
-      <p className={styles.label}>{label}</p>
     </header>
   )
 }

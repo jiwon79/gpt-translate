@@ -1,28 +1,30 @@
 @import 'styles/styleGuide.scss';
 
 .header {
-  position: relative;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  width: $screenWidth;
   height: 50px;
   box-sizing: border-box;
   padding: 0 20px 0 20px;
   background-color: $grey250;
+  box-shadow: $grey250 0 1px 4px 0px;
+  text-decoration: none;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  width: 100%;
 }
 
 .label {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  font-size: 18px;
+  color: $grey800;
+  font-weight: bold;
 }
 
-.label__prev {
-  display: flex;
-    align-items: center;
-  text-decoration: none;
-
-  .icon__back {
-    margin-right: 8px;
-  }
+.icon__back {
+  margin-right: 6px;
 }
