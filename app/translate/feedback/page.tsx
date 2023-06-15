@@ -40,7 +40,7 @@ const FeedbackPage = () => {
       });
       setAlternativeTranslates(alternativeTranslatesResult);
     })();
-  }, [getAlternativeTranslate, language, text])
+  }, [])
 
   return (
     <>

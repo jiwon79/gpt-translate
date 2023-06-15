@@ -64,10 +64,10 @@ const Chat = ({dialog, isLastChat}: MessageProps) => {
       <audio className={styles.none} src={dialog.ttsAudioUrl} ref={audioRef} controls/>
       {isLastChat
         ? <div>
-            <button onClick={onTapEditButton}>수정</button>
-            <button onClick={onTapFeedbackButton}>피드백</button>
-            <button onClick={deleteLastDialog}>삭제</button>
-            <button onClick={playAudio}>재생</button>
+            <button onClick={() => onTapEditButton()}>수정</button>
+            <button onClick={() => onTapFeedbackButton()}>피드백</button>
+            <button onClick={() => deleteLastDialog()}>삭제</button>
+            <button onClick={() => playAudio()}>재생</button>
           </div>
         : <></>}
     </div>

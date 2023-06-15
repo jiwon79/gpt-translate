@@ -1,4 +1,4 @@
-import styles from "./RecordProcess.module.scss";
+import styles from "./RecordInterface.module.scss";
 import useAnalyser, { AnalyserType } from "@/lib/hooks/useAnalyser";
 import AudioVisualizer from "./AudioVisualizer";
 import { Language } from "@/lib/utils/constant";
@@ -11,7 +11,7 @@ interface RecordProcessProps {
   language: Language;
 }
 
-const RecordProcess = ({stream, stopRecording, language}: RecordProcessProps) => {
+const RecordInterface = ({stream, stopRecording, language}: RecordProcessProps) => {
   const { audioData } = useAnalyser({ stream, analyserType: AnalyserType.TIME });
   const guideText = language === Language.EN ? "Speak" : "한국어로 말하세요.";
   const completeText = language === Language.EN ? "Complete" : "완료";
@@ -31,4 +31,4 @@ const RecordProcess = ({stream, stopRecording, language}: RecordProcessProps) =>
   )
 }
 
-export default RecordProcess;
+export default RecordInterface;

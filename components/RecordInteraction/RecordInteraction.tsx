@@ -2,7 +2,7 @@ import styles from './RecordInteraction.module.scss';
 import useRecorder from "@/lib/hooks/useRecorder";
 import { useEffect, useState } from "react";
 
-import RecordProcess from "@/components/RecordProcess/RecordProcess";
+import RecordInterface from "@/components/RecordInterface/RecordInterface";
 import { blobUrlToBase64 } from "@/lib/utils/function";
 import { useRecoilState } from "recoil";
 import { Language } from "@/lib/utils/constant";
@@ -61,7 +61,7 @@ const RecordInteraction = () => {
       );
     case BehaviorEnum.RECORD:
       return (
-        <RecordProcess stream={stream} stopRecording={stopRecording} language={curLanguage}/>
+        <RecordInterface stream={stream} stopRecording={stopRecording} language={curLanguage}/>
       );
   }
 }
