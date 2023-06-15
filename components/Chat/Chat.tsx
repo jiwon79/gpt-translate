@@ -8,6 +8,7 @@ import { behaviorAtom, BehaviorEnum } from "@/lib/recoil/behavior";
 import styles from './Chat.module.scss';
 import Bubble from "@/components/Svg/Bubble";
 import SpeechIcon from "@/components/Svg/SpeechIcon";
+import { Language } from "@/lib/utils/constant";
 
 interface MessageProps {
   dialog: Dialog;
@@ -55,23 +56,35 @@ const Chat = ({dialog, isLastChat}: MessageProps) => {
   }
 
   return (
-    <div>
-      <div className={styles.container}>
-        <p>{dialog.text == '' ? 'loading' : dialog.text}</p>
-        <p>{dialog.translateText === '' ? 'loading' : dialog.translateText}</p>
-        <p>{dialog.reTranslateText === '' ? 'loading' : dialog.reTranslateText}</p>
+    <div className={dialog.language === Language.EN ? styles.left : styles.right}>
+      <div className={styles.bubble__wrap__top}>
+        <div className={styles.text__wrap}>
+          <p className={styles.text}>
+            {dialog.text == '' ? 'loading...' : dialog.text}
+          </p>
+          <p className={styles.text__translate}>
+            {dialog.translateText === '' ? 'loading...' : dialog.translateText}
+          </p>
+          <p className={styles.text__reTranslate}>
+            {dialog.reTranslateText === '' ? 'loading...' : dialog.reTranslateText}
+          </p>
+        </div>
+        <button onClick={() => playAudio()}>
+          <SpeechIcon color={"#2e2e2e"} />
+        </button>
       </div>
-      <Bubble color={"#2e2e2e"}/>
-      <SpeechIcon color={"#2e2e2e"} />
-      <audio className={styles.none} src={dialog.ttsAudioUrl} ref={audioRef} controls/>
-      {isLastChat
-        ? <div>
-            <button onClick={() => onTapEditButton()}>수정</button>
-            <button onClick={() => onTapFeedbackButton()}>피드백</button>
-            <button onClick={() => deleteLastDialog()}>삭제</button>
-            <button onClick={() => playAudio()}>재생</button>
-          </div>
-        : <></>}
+      <div className={styles.bubble__wrap__bottom}>
+        {dialog.language === Language.EN && <Bubble color={"#2e2e2e"} classname={styles.bubble__left} />}
+        <audio className={styles.none} src={dialog.ttsAudioUrl} ref={audioRef} controls/>
+        {isLastChat
+          ? <div>
+              <button onClick={() => onTapEditButton()}>수정</button>
+              <button onClick={() => onTapFeedbackButton()}>피드백</button>
+              <button onClick={() => deleteLastDialog()}>삭제</button>
+            </div>
+          : <></>}
+        {dialog.language === Language.KO && <Bubble color={"#2e2e2e"} classname={styles.bubble__right} />}
+      </div>
     </div>
   );
 }
