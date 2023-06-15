@@ -6,6 +6,7 @@ import { useRecoilState } from "recoil";
 import { infoAtom } from "@/lib/recoil";
 import { ChangeEvent } from "react";
 import Link from "next/link";
+import { Metadata } from "next";
 
 const Home = () => {
   const [info, setInfo] = useRecoilState(infoAtom);

@@ -3,10 +3,9 @@ import { useRecoilState } from "recoil";
 import { Language } from "@/lib/utils/constant";
 import { audioArrayToUrl, reverseLanguage } from "@/lib/utils/function";
 import speechTextAPI from "@/lib/api/speechTextAPI";
-import Message from "@/lib/model/Message";
-import chatAPI from "@/lib/api/chatAPI";
 import { useRef } from "react";
 import useGptTranslate from "@/lib/hooks/useGptTranslate";
+import { toast } from "react-toastify";
 
 const useDialog = () => {
   const [dialogList, setDialogList] = useRecoilState(dialogListAtom)
@@ -83,6 +82,7 @@ const useDialog = () => {
 
     if (text.isBlank()) {
       console.log('음성인식 실패');
+      toast('aa');
       const failText = language === Language.KO
         ? '음성인식 실패'
         : 'Speech recognition failed.';
