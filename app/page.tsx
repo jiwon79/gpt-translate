@@ -3,14 +3,23 @@ import Link from "next/link";
 
 import TextInput from "@/components/TextInput/TextInput";
 import ToggleInput from "@/components/ToggleInput/ToggleInput";
-import { useRecoilState } from "recoil";
-import { infoAtom } from "@/lib/recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { dialogListAtom, infoAtom } from "@/lib/recoil";
 import { ChangeEvent } from "react";
 
 import styles from './page.module.scss';
+import { useRouter } from "next/navigation";
 
 const Home = () => {
+  const router = useRouter();
+  const setDialogList = useSetRecoilState(dialogListAtom);
   const [info, setInfo] = useRecoilState(infoAtom);
+
+  const onTapStartButton = () => {
+    setDialogList([]);
+    router.push('/translate');
+  }
+
   const handlePlace = (e: ChangeEvent<HTMLInputElement>) => {
     setInfo({...info, place: e.target.value});
   }
@@ -54,9 +63,9 @@ const Home = () => {
       />
       <ToggleInput label={"높임말"} checked={info.isPolite} onChange={handlePolite}/>
       <div className={styles.spacer}/>
-      <Link href={"/translate"} className={styles.link__start}>
+      <button className={styles.link__start} onClick={onTapStartButton}>
         <p>시작하기</p>
-      </Link>
+      </button>
     </div>
   )
 }

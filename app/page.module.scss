@@ -26,6 +26,9 @@
 
 .link__start {
   display: flex;
+  border: none;
+  outline: none;
+  cursor: pointer;
   justify-content: center;
   align-items: center;
   width: $screenWidth;
