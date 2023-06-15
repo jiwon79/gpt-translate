@@ -81,19 +81,13 @@ const useDialog = () => {
     const language = lastDialogRef.current.language;
 
     if (text.isBlank()) {
-      console.log('음성인식 실패');
-      toast('aa');
       const failText = language === Language.KO
         ? '음성인식 실패'
         : 'Speech recognition failed.';
-      lastDialogRef.current = {
-        ...lastDialogRef.current,
-        text: failText,
-        translateText: ' ',
-        reTranslateText: ' ',
-        ttsAudioUrl: ' ',
-      }
-      _updateLastDialog();
+      toast(failText);
+      const newDialogList = dialogList.slice(0, dialogList.length - 1);
+      setDialogList(newDialogList);
+      lastDialogRef.current = null;
       return;
     }
 
