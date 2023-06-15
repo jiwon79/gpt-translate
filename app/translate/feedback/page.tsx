@@ -90,7 +90,7 @@ const FeedbackPage = () => {
 
   return (
     <>
-      <Header label={""} prevLabel={"피드백"} prevHref={"/translate"}/>
+      <Header/>
       <p>{text}</p>
       <p>{language}</p>
       {alternativeTranslates.map((alternativeTranslate, index) => {
