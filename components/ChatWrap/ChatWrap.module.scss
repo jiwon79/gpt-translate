@@ -1,3 +1,16 @@
+@import "styles/styleGuide";
+
+.container {
+  width: $screenWidth;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.spacer {
+  flex: 1;
+}
+
 .info__wrap {
   display: flex;
   flex-direction: column;

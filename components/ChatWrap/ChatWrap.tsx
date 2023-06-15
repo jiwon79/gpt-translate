@@ -8,7 +8,8 @@ const ChatWrap = () => {
   const info = useRecoilValue(infoAtom);
 
   return (
-    <div>
+    <div className={styles.container}>
+      <div className={styles.spacer}></div>
       <div className={styles.info__wrap}>
         <p>대화를 시작했어요.</p>
         {info.place === '' ? <></> : <p>장소 : {info.place}</p>}

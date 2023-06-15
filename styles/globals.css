@@ -12,13 +12,14 @@ html {
 }
 
 body {
+  display: flex;
+  flex-direction: column;
   font-family: Pretendard, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  display: block;
   max-width: 480px;
   width: 100%;
-  min-height: 100vh;
+  min-height: 100svh;
   align-self: center;
   -webkit-align-self: center;
   background-color: #fff;;

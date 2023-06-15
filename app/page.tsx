@@ -1,6 +1,4 @@
 "use client"
-import Link from "next/link";
-
 import TextInput from "@/components/TextInput/TextInput";
 import ToggleInput from "@/components/ToggleInput/ToggleInput";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -49,14 +47,14 @@ const Home = () => {
       </p>
       <TextInput
         label={"장소"}
-        placeholder={'대화가 진행되는 장소를 입력해 주세요.'}
+        placeholder={'대화를 하는 장소를 입력해 주세요.'}
         value={info.place}
         onChange={handlePlace}
         deleteAction={deletePlace}
       />
       <TextInput
         label={"상황"}
-        placeholder={'대화 상황을 간단히 설명해 주세요.'}
+        placeholder={'상황을 간단히 설명해 주세요.'}
         value={info.situation}
         onChange={handleSituation}
         deleteAction={deleteSituation}
