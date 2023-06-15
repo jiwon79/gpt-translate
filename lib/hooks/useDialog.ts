@@ -40,6 +40,22 @@ const useDialog = () => {
     _createDialog(newDialog);
   }
 
+  const acceptTranslateFeedback = async (translateText: string, reTranslateText: string) => {
+    if (dialogList.length === 0) return;
+    lastDialogRef.current = dialogList[dialogList.length - 1];
+    const language = lastDialogRef.current.language;
+
+    const ttsResponse = await speechTextAPI.tts(translateText, reverseLanguage(language));
+
+    lastDialogRef.current = {
+      ...lastDialogRef.current,
+      translateText: translateText,
+      reTranslateText: reTranslateText,
+      ttsAudioUrl: audioArrayToUrl(ttsResponse.audioContent.data),
+    }
+    _updateLastDialog();
+  }
+
   const editLastDialog = (text: string) => {
     if (dialogList.length === 0) return;
     lastDialogRef.current = dialogList[dialogList.length - 1];
@@ -59,16 +75,6 @@ const useDialog = () => {
     const newDialogList = dialogList.slice(0, dialogList.length - 1);
     setDialogList(newDialogList);
     lastDialogRef.current = null;
-  }
-
-  const fetchChat = async (text: string) => {
-    const messages = [
-      new Message("system", "너는 번역 전문가야."),
-      new Message("system", "한글을 입력하면 영어로, 영어를 입력하면 한글로 번역해줘."),
-      new Message("user", text),
-    ];
-
-    return await chatAPI.chat(messages);
   }
 
   const translateText = async (text: string) => {
@@ -126,6 +132,7 @@ const useDialog = () => {
     translateText: translateText,
     editLastDialog: editLastDialog,
     deleteLastDialog: deleteLastDialog,
+    acceptTranslateFeedback: acceptTranslateFeedback,
   }
 }
 
