@@ -3,12 +3,12 @@ import TextInput from "@/components/TextInput/TextInput";
 import ToggleInput from "@/components/ToggleInput/ToggleInput";
 import styles from './page.module.scss';
 import { useRecoilState } from "recoil";
-import { infoState } from "@/lib/recoil";
+import { infoAtom } from "@/lib/recoil";
 import { ChangeEvent } from "react";
 import Link from "next/link";
 
 const Home = () => {
-  const [info, setInfo] = useRecoilState(infoState);
+  const [info, setInfo] = useRecoilState(infoAtom);
   const handlePlace = (e: ChangeEvent<HTMLInputElement>) => {
     setInfo({...info, place: e.target.value});
   }
