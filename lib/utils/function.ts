@@ -17,7 +17,9 @@ export const blobUrlToBase64 = async (blobUrl: string): Promise<string> => {
 
   const base64 = await promise;
 
-  return base64.replace("data:audio/webm;base64,", "")
+  return base64
+    .replace("data:audio/webm;base64,", "")
+    .replace("data:audio/mp4;base64,", "");
 }
 
 export const audioArrayToUrl = (audioArray: number[]): string => {
