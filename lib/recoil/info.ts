@@ -1,4 +1,7 @@
 import { atom, RecoilState } from "recoil";
+import { recoilPersist } from "recoil-persist";
+
+const { persistAtom } = recoilPersist();
 
 export interface Info {
   place: string;
@@ -15,4 +18,5 @@ const initialInfo = {
 export const infoAtom: RecoilState<Info> = atom({
   key: 'info',
   default: initialInfo,
+  effects_UNSTABLE: [persistAtom],
 });
