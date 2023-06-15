@@ -4,31 +4,58 @@ import { useRecoilState } from "recoil";
 import { dialogListAtom } from "@/lib/recoil";
 import { useEffect, useState } from "react";
 import useGptTranslate from "@/lib/hooks/useGptTranslate";
+import speechTextAPI from "@/lib/api/speechTextAPI";
+
+interface AlternativeTranslate {
+  translateText: string;
+  reTranslateText: string;
+}
 
 const FeedbackPage = () => {
   const [dialogList, setDialogList] = useRecoilState(dialogListAtom)
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { getAlternativeTranslate } = useGptTranslate();
-  console.log(dialogList);
+  const [alternativeTranslates, setAlternativeTranslates] = useState<AlternativeTranslate[]>([
+    {translateText: "", reTranslateText: ""},
+    {translateText: "", reTranslateText: ""},
+  ]);
   const lastDialog = dialogList[dialogList.length - 1];
-  console.log(lastDialog);
   const { text, language } = lastDialog;
 
   useEffect(() => {
     (async () => {
       setIsLoading(true);
       const alternativeTranslate = await getAlternativeTranslate(text, language);
-      console.log(alternativeTranslate);
-      console.log(alternativeTranslate.split("/"));
-
+      const alternativeTranslateTexts = alternativeTranslate.split("/");
+      // for await
+      const reTranslateTexts = await Promise.all(alternativeTranslateTexts.map(async (text) => {
+        const response =  await speechTextAPI.translate(text, language);
+        return response.result
+      }));
+      if (alternativeTranslateTexts.length !== reTranslateTexts.length) return;
+      const alternativeTranslatesResult = alternativeTranslateTexts.map((translateText, index) => {
+        return {
+          translateText,
+          reTranslateText: reTranslateTexts[index],
+        }
+      });
+      setAlternativeTranslates(alternativeTranslatesResult);
     })();
-  }, [])
+  }, [getAlternativeTranslate, language, text])
 
   return (
     <>
       <Header label={""} prevLabel={"피드백"} prevHref={"/translate"} />
       <p>{text}</p>
       <p>{language}</p>
+      {alternativeTranslates.map((alternativeTranslate, index) => {
+        return (
+          <div key={index}>
+            <p>{alternativeTranslate.translateText}</p>
+            <p>{alternativeTranslate.reTranslateText}</p>
+          </div>
+        )
+      })}
       <p>이런 번역은 어떠세요?</p>
       <p>번역 요청 사항을 말하세요.</p>
     </>
