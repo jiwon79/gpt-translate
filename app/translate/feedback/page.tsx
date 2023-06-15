@@ -8,6 +8,8 @@ import RecordInterface from "@/components/RecordInterface/RecordInterface";
 import { blobUrlToBase64 } from "@/lib/utils/function";
 import useDialog from "@/lib/hooks/useDialog";
 import { useRouter } from "next/navigation";
+import { Language } from "@/lib/utils/constant";
+import { Dialog } from "@/lib/recoil/dialogList";
 
 interface AlternativeTranslate {
   translateText: string;
@@ -25,7 +27,13 @@ const FeedbackPage = () => {
     {translateText: "", reTranslateText: ""},
     {translateText: "", reTranslateText: ""},
   ]);
-  const lastDialog = dialogList[dialogList.length - 1];
+  const lastDialog: Dialog = dialogList.length > 0 ? dialogList[dialogList.length - 1] : {
+    text: "",
+    translateText: "",
+    language: Language.KO,
+    reTranslateText: "",
+    ttsAudioUrl: "",
+  };
   const {text, translateText, language} = lastDialog;
 
   const [newTranslateText, setNewTranslateText] = useState<string>('');
