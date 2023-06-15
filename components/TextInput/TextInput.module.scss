@@ -1,22 +1,31 @@
+@import 'styles/styleGuide.scss';
+
 .container {
   display: flex;
-  width: min(100%, 480px);
-  box-sizing: border-box;
+  width: $screenWidth;
   padding: 10px 20px 10px 20px;
-  margin: 0 20px 10px 20px;
-  border-bottom: 1px solid #a2a2a2;
+  margin-top: 18px;
+  border-bottom: 1px solid $grey350;
+  box-sizing: border-box;
 }
 
 .label {
   width: 50px;
+  font-size: 18px;
   margin-right: 40px;
+  font-weight: bold;
 }
 
 .input {
   width: 100%;
+  font-size: 18px;
   border: none;
 
   &:focus {
     outline: none;
+  }
+
+  &::placeholder {
+    color: $grey350;
   }
 }
