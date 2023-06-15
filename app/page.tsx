@@ -24,6 +24,7 @@ const Home = () => {
   return (
     <div className={styles.container}>
       <p>어떤 상황이신가요?</p>
+      <p>장소와 상황을 입력하면 더 정확한 번역 결과를 얻을 수 있어요.</p>
       <TextInput
         label={"장소"}
         placeholder={'대화가 진행되는 장소를 입력해 주세요.'}

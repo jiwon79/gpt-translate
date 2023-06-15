@@ -6,6 +6,7 @@ import useDialog from "@/lib/hooks/useDialog";
 import { Dialog } from "@/lib/recoil/dialogList";
 import { behaviorAtom, BehaviorEnum } from "@/lib/recoil/behavior";
 import styles from './Chat.module.scss';
+import Bubble from "@/components/Svg/Bubble";
 
 interface MessageProps {
   dialog: Dialog;
@@ -59,6 +60,7 @@ const Chat = ({dialog, isLastChat}: MessageProps) => {
         <p>{dialog.translateText === '' ? 'loading' : dialog.translateText}</p>
         <p>{dialog.reTranslateText === '' ? 'loading' : dialog.reTranslateText}</p>
       </div>
+      <Bubble color={"#2e2e2e"}/>
       <audio className={styles.none} src={dialog.ttsAudioUrl} ref={audioRef} controls/>
       {isLastChat
         ? <div>

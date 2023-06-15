@@ -9,6 +9,8 @@ import { Language } from "@/lib/utils/constant";
 import speechTextAPI from "@/lib/api/speechTextAPI";
 import { behaviorAtom, BehaviorEnum } from "@/lib/recoil/behavior";
 import useDialog from "@/lib/hooks/useDialog";
+import MicFill from "@/components/Svg/MicFill";
+import MicEmpty from "@/components/Svg/MicEmpty";
 
 const RecordInteraction = () => {
   const {
@@ -50,8 +52,10 @@ const RecordInteraction = () => {
     case BehaviorEnum.WAIT:
       return (
         <div className={styles.button__wrap}>
+          <MicFill color={"#2e2e2e"} />
           <button onClick={() => handleRecording(Language.EN)}>영어</button>
           <p>말하려면 누르세요.</p>
+          <MicEmpty color={"#ff00ff"} />
           <button onClick={() => handleRecording(Language.KO)}>한국어</button>
         </div>
       );
