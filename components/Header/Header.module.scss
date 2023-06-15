@@ -18,5 +18,11 @@
 }
 
 .label__prev {
+  display: flex;
+    align-items: center;
   text-decoration: none;
+
+  .icon__back {
+    margin-right: 8px;
+  }
 }
