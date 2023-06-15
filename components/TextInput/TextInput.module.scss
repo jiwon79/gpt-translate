@@ -2,6 +2,7 @@
 
 .container {
   display: flex;
+  align-items: center;
   width: $screenWidth;
   padding: 10px 20px 10px 20px;
   margin-top: 18px;
@@ -27,5 +28,30 @@
 
   &::placeholder {
     color: $grey350;
+  }
+}
+
+.button {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: none;
+  border: none;
+  background-color: transparent;
+
+  div {
+    margin: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    color: $grey100;
+    background-color: $grey350;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
   }
 }
