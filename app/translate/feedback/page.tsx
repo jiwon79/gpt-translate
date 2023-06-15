@@ -27,7 +27,6 @@ const FeedbackPage = () => {
       setIsLoading(true);
       const alternativeTranslate = await getAlternativeTranslate(text, language);
       const alternativeTranslateTexts = alternativeTranslate.split("/");
-      // for await
       const reTranslateTexts = await Promise.all(alternativeTranslateTexts.map(async (text) => {
         const response =  await speechTextAPI.translate(text, language);
         return response.result
@@ -57,7 +56,9 @@ const FeedbackPage = () => {
         )
       })}
       <p>이런 번역은 어떠세요?</p>
-      <p>번역 요청 사항을 말하세요.</p>
+      <p>번역 요청 사항 입력하기</p>
+      <input type="text"/>
+      <button>녹음</button>
     </>
   )
 }

@@ -2,7 +2,7 @@ import styles from './RecordInteraction.module.scss';
 import useRecorder from "@/lib/hooks/useRecorder";
 import { useEffect, useState } from "react";
 
-import RecordProcess from "./RecordProcess/RecordProcess";
+import RecordProcess from "@/components/RecordProcess/RecordProcess";
 import { blobUrlToBase64 } from "@/lib/utils/function";
 import { useRecoilState } from "recoil";
 import { Language } from "@/lib/utils/constant";
