@@ -7,7 +7,7 @@ import useGptTranslate from "@/lib/hooks/useGptTranslate";
 import speechTextAPI from "@/lib/api/speechTextAPI";
 import useRecorder from "@/lib/hooks/useRecorder";
 import RecordInterface from "@/components/RecordInterface/RecordInterface";
-import { blobUrlToBase64 } from "@/lib/utils/function";
+import { blobUrlToBase64, reverseLanguage } from "@/lib/utils/function";
 
 interface AlternativeTranslate {
   translateText: string;
@@ -19,7 +19,7 @@ const FeedbackPage = () => {
   const {isRecording, startRecording, stopRecording, stream, audioURL} = useRecorder();
   const [feedBackText, setFeedBackText] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const {getAlternativeTranslate} = useGptTranslate();
+  const {getAlternativeTranslate, acceptFeedback} = useGptTranslate();
   const [alternativeTranslates, setAlternativeTranslates] = useState<AlternativeTranslate[]>([
     {translateText: "", reTranslateText: ""},
     {translateText: "", reTranslateText: ""},
@@ -67,6 +67,18 @@ const FeedbackPage = () => {
     })();
   }, [audioURL]);
 
+  const onTapAcceptButton = async () => {
+    const translateFeedback = await acceptFeedback(text, translateText, feedBackText, language);
+    console.log(translateFeedback);
+    const reTranslateFeedback = await speechTextAPI.translate(translateFeedback, language);
+    console.log(reTranslateFeedback);
+
+  }
+
+  const handleFeedbackText = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFeedBackText(e.target.value);
+  }
+
   return (
     <>
       <Header label={""} prevLabel={"피드백"} prevHref={"/translate"}/>
@@ -82,12 +94,12 @@ const FeedbackPage = () => {
       })}
       <p>이런 번역은 어떠세요?</p>
       <p>번역 요청 사항 입력하기</p>
-      <input type="text" value={feedBackText}/>
+      <input type="text" value={feedBackText} onChange={handleFeedbackText} />
       <button onClick={() => onTapRecordButton()}>녹음</button>
       {isRecording
         ? <RecordInterface stream={stream} stopRecording={stopRecording} language={language}/>
         : <></>}
-
+      <button onClick={() => onTapAcceptButton()}>피드백 반영하기</button>
     </>
   )
 }
