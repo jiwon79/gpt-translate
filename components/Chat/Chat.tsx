@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef, useState } from "react";
+import { useRef } from "react";
 import { useRecoilState } from "recoil";
 import { useRouter } from "next/navigation";
 
@@ -22,9 +22,8 @@ interface MessageProps {
 const Chat = ({dialog, isLastChat}: MessageProps) => {
   const router = useRouter();
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [text, setText] = useState<string>('');
   const [behavior, setBehavior] = useRecoilState(behaviorAtom);
-  const {dialogList, editLastDialog, deleteLastDialog} = useDialog();
+  const {deleteLastDialog} = useDialog();
 
   const playAudio = async () => {
     if (!audioRef.current) return;
@@ -32,18 +31,8 @@ const Chat = ({dialog, isLastChat}: MessageProps) => {
     await audioRef.current.play();
   }
 
-  const handleText = (e: ChangeEvent<HTMLInputElement>) => {
-    setText(e.target.value);
-  }
-
   const onTapEditButton = () => {
-    setText(dialogList[dialogList.length - 1].text);
     setBehavior(BehaviorEnum.EDIT);
-  }
-
-  const completeEdit = () => {
-    editLastDialog(text);
-    setBehavior(BehaviorEnum.WAIT);
   }
 
   const onTapFeedbackButton = () => {
@@ -51,12 +40,7 @@ const Chat = ({dialog, isLastChat}: MessageProps) => {
   }
 
   if (behavior === BehaviorEnum.EDIT && isLastChat) {
-    return (
-      <>
-        <input type="text" onChange={handleText} value={text} />
-        <button onClick={() => completeEdit()}>완료</button>
-      </>
-    )
+    return <></>;
   }
 
   const sideStyle = dialog.language === Language.EN ? styles.left : styles.right;
@@ -73,7 +57,7 @@ const Chat = ({dialog, isLastChat}: MessageProps) => {
           isLastChat={isLastChat}
         />
         <button className={styles.button__audio} onClick={() => playAudio()}>
-          <SpeechIcon color={styleGuide.grey600} />
+          <SpeechIcon color={styleGuide.grey600}/>
         </button>
       </div>
 

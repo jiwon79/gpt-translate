@@ -1,6 +1,6 @@
 "use client"
 import useRecorder from "@/lib/hooks/useRecorder";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 import RecordInterface from "@/components/RecordInterface/RecordInterface";
 import { blobUrlToBase64 } from "@/lib/utils/function";
@@ -20,7 +20,17 @@ const RecordInteraction = () => {
   } = useRecorder();
   const [curLanguage, setCurLanguage] = useState<Language>(Language.KO);
   const [behavior, setBehavior] = useRecoilState(behaviorAtom);
-  const {translateText, createEmptyDialog} = useDialog();
+  const {dialogList, translateText, createEmptyDialog, editLastDialog} = useDialog();
+  const [text, setText] = useState<string | null>(null);
+
+  const handleText = (e: ChangeEvent<HTMLInputElement>) => {
+    setText(e.target.value);
+  }
+
+  const completeEdit = () => {
+    editLastDialog(text ?? '');
+    setBehavior(BehaviorEnum.WAIT);
+  }
 
   const handleRecording = (language: Language) => {
     setCurLanguage(language);
@@ -47,7 +57,10 @@ const RecordInteraction = () => {
 
   switch (behavior) {
     case BehaviorEnum.EDIT:
-      return <></>;
+      return <>
+        <input type="text" onChange={handleText} value={text ?? dialogList[dialogList.length - 1].text} />
+        <button onClick={() => completeEdit()}>완료</button>
+      </>;
 
     case BehaviorEnum.WAIT:
       return <RecordSelect handleRecording={handleRecording}/>;
