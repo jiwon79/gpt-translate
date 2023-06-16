@@ -8,13 +8,11 @@ import styles from './page.module.scss';
 
 const TranslatePage = () => {
   return (
-    <>
+    <div className={styles.container}>
       <Header />
-      <main className={styles.main}>
-        <ChatWrap />
-        <RecordInteraction />
-      </main>
-    </>
+      <ChatWrap />
+      <RecordInteraction />
+    </div>
   );
 }
 

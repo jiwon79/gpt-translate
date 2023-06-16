@@ -4,7 +4,11 @@
   width: $screenWidth;
   display: flex;
   flex-direction: column;
+  -webkit-flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: scroll;
   flex: 1;
+  scroll-behavior: smooth;
 }
 
 .spacer {
