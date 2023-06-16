@@ -10,6 +10,8 @@ $grey650: #494C50;
 $grey700: #3A3D41;
 $grey800: #2B2D30;
 $green: #34C759;
+$blue: #0A84FF;
+$red: #FF3B30;
 
 :export {
   scrrenWidth: $screenWidth;
@@ -24,4 +26,6 @@ $green: #34C759;
   grey700: $grey700;
   grey800: $grey800;
   green: $green;
+  blue: $blue;
+  red: $red;
 }

@@ -9,9 +9,10 @@ import { Dialog } from "@/lib/recoil/dialogList";
 import { behaviorAtom, BehaviorEnum } from "@/lib/recoil/behavior";
 import { Language } from "@/lib/utils/constant";
 
+import TextWrap from "./TextWrap/TextWrap";
+import ButtonWrap from "./ButtonWrap/ButtonWrap";
 import styleGuide from "@/styles/styleGuide.module.scss";
 import styles from './Chat.module.scss';
-import TextWrap from "@/components/Chat/TextWrap/TextWrap";
 
 interface MessageProps {
   dialog: Dialog;
@@ -62,6 +63,8 @@ const Chat = ({dialog, isLastChat}: MessageProps) => {
 
   return (
     <div className={`${sideStyle} ${styles.wrap}`}>
+      <audio className={styles.none} src={dialog.ttsAudioUrl} ref={audioRef} controls/>
+
       <div className={styles.wrap__top}>
         <TextWrap
           text={dialog.text}
@@ -73,16 +76,23 @@ const Chat = ({dialog, isLastChat}: MessageProps) => {
           <SpeechIcon color={styleGuide.grey600} />
         </button>
       </div>
+
       <div className={styles.wrap__bottom}>
-        {dialog.language === Language.EN && <Bubble color={styleGuide.grey250} classname={styles.bubble__left} />}
-        <audio className={styles.none} src={dialog.ttsAudioUrl} ref={audioRef} controls/>
-        {isLastChat
-          && <div>
-              <button onClick={() => onTapEditButton()}>수정</button>
-              <button onClick={() => onTapFeedbackButton()}>피드백</button>
-              <button onClick={() => deleteLastDialog()}>삭제</button>
-            </div>}
-        {dialog.language === Language.KO && <Bubble color={styleGuide.grey250} classname={styles.bubble__right} />}
+        {dialog.language === Language.EN && <Bubble
+          color={styleGuide.grey250}
+          classname={`${styles.bubble__left} ${styles.bubble__tail}`}
+        />}
+        <ButtonWrap
+          onTapEditButton={onTapEditButton}
+          onTapFeedbackButton={onTapFeedbackButton}
+          onTapDeleteButton={deleteLastDialog}
+          isLastChat={isLastChat}
+          language={dialog.language}
+        />
+        {dialog.language === Language.KO && <Bubble
+          color={styleGuide.grey250}
+          classname={`${styles.bubble__right} ${styles.bubble__tail}`}
+        />}
       </div>
     </div>
   );

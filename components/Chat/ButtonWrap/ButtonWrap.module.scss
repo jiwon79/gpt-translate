@@ -1,0 +1,28 @@
+@import "styles/styleGuide.module";
+
+.button__wrap {
+  margin-top: 2px;
+}
+
+.button {
+  outline: none;
+  border: none;
+  background-color: transparent;
+  margin-left: 4px;
+
+  p {
+    font-size: 14px;
+  }
+}
+
+.edit p {
+  color: $blue;
+}
+
+.feedback p {
+  color: $blue;
+}
+
+.delete p {
+  color: $red;
+}

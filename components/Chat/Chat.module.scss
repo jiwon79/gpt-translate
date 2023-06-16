@@ -24,18 +24,6 @@
   display: none;
 }
 
-.text {
-
-}
-
-.text__translate {
-
-}
-
-.text__reTranslate {
-
-}
-
 .wrap {
   position: relative;
 }
@@ -50,24 +38,18 @@
   padding: 6px 12px 6px 12px;
 }
 
-.text__wrap {
-  flex: 1;
-}
-
 .wrap__bottom {
   display: flex;
   margin-bottom: 12px;
 }
 
-.bubble__left {
-  transform: scaleX(-1);
+.bubble__tail {
   position: relative;
   bottom: 1px;
 }
 
-.bubble__right {
-  position: relative;
-  bottom: 1px;
+.bubble__left {
+  transform: scaleX(-1);
 }
 
 .button__audio {
