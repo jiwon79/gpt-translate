@@ -1,6 +1,6 @@
 "use client"
 import Header from "@/components/Header/Header";
-import RecordInteraction from "@/components/RecordInteraction/RecordInteraction";
+import Interaction from "@/components/Interaction/Interaction";
 import ChatWrap from "@/components/ChatWrap/ChatWrap";
 import '@/lib/utils/prototype';
 
@@ -10,7 +10,7 @@ const TranslatePage = () => {
   return (
     <div className={styles.container}>
       <ChatWrap />
-      <RecordInteraction />
+      <Interaction />
       <Header />
     </div>
   );

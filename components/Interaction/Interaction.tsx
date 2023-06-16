@@ -13,7 +13,7 @@ import { behaviorAtom, BehaviorEnum } from "@/lib/recoil/behavior";
 import RecordSelect from "./RecordSelect/RecordSelect";
 import EditChat from "./EditChat/EditChat";
 
-const RecordInteraction = () => {
+const Interaction = () => {
   const {
     audioURL,
     stream,
@@ -66,4 +66,4 @@ const RecordInteraction = () => {
   }
 }
 
-export default RecordInteraction;
+export default Interaction;
