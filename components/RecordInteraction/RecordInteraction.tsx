@@ -1,15 +1,17 @@
 "use client"
 import useRecorder from "@/lib/hooks/useRecorder";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 
 import RecordInterface from "@/components/RecordInterface/RecordInterface";
 import { blobUrlToBase64 } from "@/lib/utils/function";
-import { useRecoilState } from "recoil";
+import useDialog from "@/lib/hooks/useDialog";
 import { Language } from "@/lib/utils/constant";
 import speechTextAPI from "@/lib/api/speechTextAPI";
 import { behaviorAtom, BehaviorEnum } from "@/lib/recoil/behavior";
-import useDialog from "@/lib/hooks/useDialog";
-import RecordSelect from "@/components/RecordInteraction/RecordSelect/RecordSelect";
+
+import RecordSelect from "./RecordSelect/RecordSelect";
+import EditChat from "./EditChat/EditChat";
 
 const RecordInteraction = () => {
   const {
@@ -20,17 +22,7 @@ const RecordInteraction = () => {
   } = useRecorder();
   const [curLanguage, setCurLanguage] = useState<Language>(Language.KO);
   const [behavior, setBehavior] = useRecoilState(behaviorAtom);
-  const {dialogList, translateText, createEmptyDialog, editLastDialog} = useDialog();
-  const [text, setText] = useState<string | null>(null);
-
-  const handleText = (e: ChangeEvent<HTMLInputElement>) => {
-    setText(e.target.value);
-  }
-
-  const completeEdit = () => {
-    editLastDialog(text ?? '');
-    setBehavior(BehaviorEnum.WAIT);
-  }
+  const {translateText, createEmptyDialog, editLastDialog} = useDialog();
 
   const handleRecording = (language: Language) => {
     setCurLanguage(language);
@@ -57,10 +49,7 @@ const RecordInteraction = () => {
 
   switch (behavior) {
     case BehaviorEnum.EDIT:
-      return <>
-        <input type="text" onChange={handleText} value={text ?? dialogList[dialogList.length - 1].text} />
-        <button onClick={() => completeEdit()}>완료</button>
-      </>;
+      return <EditChat />
 
     case BehaviorEnum.WAIT:
       return <RecordSelect handleRecording={handleRecording}/>;
