@@ -1,13 +1,15 @@
 @import 'styles/styleGuide.module';
 
 .header {
+  position: absolute;
+  width: $screenWidth;
   cursor: pointer;
   display: flex;
   align-items: center;
   height: 50px;
   box-sizing: border-box;
   padding: 0 20px 0 20px;
-  background-color: $grey250;
+  background-color: transparentize($grey250, 0.08);
   box-shadow: $grey250 0 1px 4px 0px;
   text-decoration: none;
 }

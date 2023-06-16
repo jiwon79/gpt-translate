@@ -79,7 +79,7 @@ const Chat = ({dialog, isLastChat}: MessageProps) => {
 
       <div className={styles.wrap__bottom}>
         {dialog.language === Language.EN && <Bubble
-          color={styleGuide.grey250}
+          color={styleGuide.grey300}
           classname={`${styles.bubble__left} ${styles.bubble__tail}`}
         />}
         <ButtonWrap
@@ -90,7 +90,7 @@ const Chat = ({dialog, isLastChat}: MessageProps) => {
           language={dialog.language}
         />
         {dialog.language === Language.KO && <Bubble
-          color={styleGuide.grey250}
+          color={styleGuide.grey300}
           classname={`${styles.bubble__right} ${styles.bubble__tail}`}
         />}
       </div>

@@ -9,9 +9,9 @@ import styles from './page.module.scss';
 const TranslatePage = () => {
   return (
     <div className={styles.container}>
-      <Header />
       <ChatWrap />
       <RecordInteraction />
+      <Header />
     </div>
   );
 }
