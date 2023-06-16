@@ -85,8 +85,7 @@ const useDialog = () => {
         ? '음성인식 실패'
         : 'Speech recognition failed.';
       toast(failText);
-      const newDialogList = dialogList.slice(0, dialogList.length - 1);
-      setDialogList(newDialogList);
+      setDialogList((dialogList) => dialogList.slice(0, dialogList.length - 1));
       lastDialogRef.current = null;
       return;
     }
