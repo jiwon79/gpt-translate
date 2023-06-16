@@ -4,7 +4,53 @@
   display: flex;
   width: $screenWidth;
   padding: 18px;
-  height: 100px;
   box-sizing: border-box;
   justify-content: space-between;
+}
+
+.button {
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  outline: none;
+  border: none;
+  background-color: transparent;
+}
+
+.icon__wrap {
+  p {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+}
+
+.icon__mic {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  box-shadow: $grey350 2px 2px 6px 1px;
+
+  &.english {
+    border: 2px solid $blue;
+  }
+
+  &.korea {
+    border: 2px solid $red;
+  }
+}
+
+.text__guide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: $grey800;
 }

@@ -11,17 +11,32 @@ interface RecordSelectProps {
 const RecordSelect = ({ handleRecording }: RecordSelectProps) => {
   return (
     <div className={styles.button__wrap}>
-      <button onClick={() => handleRecording(Language.EN)}>
-        <div>
+      <button
+        className={styles.button}
+        onClick={() => handleRecording(Language.EN)}
+      >
+        <div className={styles.icon__wrap}>
           <p>English</p>
-          <MicEmpty color={styleGuide.blue} />
+          <div className={`${styles.icon__mic} ${styles.english}`}>
+            <MicEmpty color={styleGuide.blue} />
+          </div>
         </div>
       </button>
-      <p>말하려면 누르세요.</p>
-      <button onClick={() => handleRecording(Language.KO)}>
-        <div>
+
+      <p className={styles.text__guide}>
+        마이크 버튼을<br />
+        누르고 말하세요.
+      </p>
+
+      <button
+        className={styles.button}
+        onClick={() => handleRecording(Language.KO)}
+      >
+        <div className={styles.icon__wrap}>
           <p>한국어</p>
-          <MicEmpty color={styleGuide.red} />
+          <div className={`${styles.icon__mic} ${styles.korea}`}>
+            <MicEmpty color={styleGuide.red} />
+          </div>
         </div>
       </button>
     </div>
