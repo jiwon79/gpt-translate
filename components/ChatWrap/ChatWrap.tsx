@@ -11,9 +11,13 @@ const ChatWrap = () => {
     <div className={styles.container}>
       <div className={styles.spacer}></div>
       <div className={styles.info__wrap}>
-        <p>대화를 시작했어요.</p>
-        {info.place === '' ? <></> : <p>장소 : {info.place}</p>}
-        {info.situation === '' ? <></> : <p>상황 : {info.situation}</p>}
+        <p className={styles.info__start}>대화를 시작했어요.</p>
+        {info.place === ''
+          ? <></>
+          : <p className={styles.info__place}>장소 : {info.place}</p>}
+        {info.situation === ''
+          ? <></>
+          : <p className={styles.info__situation}>상황 : {info.situation}</p>}
       </div>
       {dialogList.map((dialog, index) => (
         <Chat

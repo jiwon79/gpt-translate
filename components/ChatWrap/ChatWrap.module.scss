@@ -17,7 +17,20 @@
   align-items: center;
 }
 
-.info {
-  text-align: center;
+.info__wrap {
+  color: $grey600;
+  font-size: 16px;
+  margin-bottom: 40px;
 
+
+  .info__start {
+    margin-bottom: 16px;
+  }
+
+  .info__place {
+    margin-bottom: 4px;
+  }
+
+  .info__situation {
+  }
 }
