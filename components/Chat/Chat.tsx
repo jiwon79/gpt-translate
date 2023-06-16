@@ -11,6 +11,7 @@ import { Language } from "@/lib/utils/constant";
 
 import styleGuide from "@/styles/styleGuide.module.scss";
 import styles from './Chat.module.scss';
+import TextWrap from "@/components/Chat/TextWrap/TextWrap";
 
 interface MessageProps {
   dialog: Dialog;
@@ -18,7 +19,6 @@ interface MessageProps {
 }
 
 const Chat = ({dialog, isLastChat}: MessageProps) => {
-  console.log(styleGuide);
   const router = useRouter();
   const audioRef = useRef<HTMLAudioElement>(null);
   const [text, setText] = useState<string>('');
@@ -58,34 +58,30 @@ const Chat = ({dialog, isLastChat}: MessageProps) => {
     )
   }
 
+  const sideStyle = dialog.language === Language.EN ? styles.left : styles.right;
+
   return (
-    <div className={dialog.language === Language.EN ? styles.left : styles.right}>
-      <div className={styles.bubble__wrap__top}>
-        <div className={styles.text__wrap}>
-          <p className={styles.text}>
-            {dialog.text == '' ? 'loading...' : dialog.text}
-          </p>
-          <p className={styles.text__translate}>
-            {dialog.translateText === '' ? 'loading...' : dialog.translateText}
-          </p>
-          <p className={styles.text__reTranslate}>
-            {dialog.reTranslateText === '' ? 'loading...' : dialog.reTranslateText}
-          </p>
-        </div>
-        <button onClick={() => playAudio()}>
-          <SpeechIcon color={"2e2e2e"} />
+    <div className={`${sideStyle} ${styles.wrap}`}>
+      <div className={styles.wrap__top}>
+        <TextWrap
+          text={dialog.text}
+          translateText={dialog.translateText}
+          reTranslateText={dialog.reTranslateText}
+          isLastChat={isLastChat}
+        />
+        <button className={styles.button__audio} onClick={() => playAudio()}>
+          <SpeechIcon color={styleGuide.grey600} />
         </button>
       </div>
-      <div className={styles.bubble__wrap__bottom}>
+      <div className={styles.wrap__bottom}>
         {dialog.language === Language.EN && <Bubble color={styleGuide.grey250} classname={styles.bubble__left} />}
         <audio className={styles.none} src={dialog.ttsAudioUrl} ref={audioRef} controls/>
         {isLastChat
-          ? <div>
+          && <div>
               <button onClick={() => onTapEditButton()}>수정</button>
               <button onClick={() => onTapFeedbackButton()}>피드백</button>
               <button onClick={() => deleteLastDialog()}>삭제</button>
-            </div>
-          : <></>}
+            </div>}
         {dialog.language === Language.KO && <Bubble color={styleGuide.grey250} classname={styles.bubble__right} />}
       </div>
     </div>

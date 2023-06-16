@@ -36,21 +36,45 @@
 
 }
 
-.bubble__wrap__top {
+.wrap {
+  position: relative;
+}
+
+.wrap__top {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
   background-color: $grey250;
-  border-radius: 10px;
+  border-radius: 18px;
   width: 280px;
+  padding: 6px 12px 6px 12px;
 }
 
 .text__wrap {
   flex: 1;
 }
 
-.bubble__wrap__bottom {
+.wrap__bottom {
   display: flex;
+  margin-bottom: 12px;
 }
 
 .bubble__left {
   transform: scaleX(-1);
+  position: relative;
+  bottom: 1px;
+}
+
+.bubble__right {
+  position: relative;
+  bottom: 1px;
+}
+
+.button__audio {
+  padding: 0;
+  outline: none;
+  border: none;
+  background-color: transparent;
+  width: 32px;
+  height: 32px;
 }
