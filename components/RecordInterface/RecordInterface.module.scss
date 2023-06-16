@@ -1,0 +1,40 @@
+@import "styles/styleGuide.module";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: $screenWidth;
+  background-color: $grey250;
+}
+
+.text {
+  font-size: 16px;
+  color: $grey650;
+  margin: 30px 0 10px 0;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  border: none;
+  padding: 6px 10px 6px 10px;
+  margin: 20px 0 30px;
+  border-radius: 100px;
+  background-color: $grey350;
+
+  & .icon {
+    width: 18px;
+    height: 18px;
+    border-radius: 2px;
+    background-color: $blue;
+    margin-right: 8px;
+  }
+
+  p {
+    font-size: 16px;
+    line-height: 20px;
+  }
+}

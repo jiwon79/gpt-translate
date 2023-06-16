@@ -1,9 +1,9 @@
-import styles from "./RecordInterface.module.scss";
 import useAnalyser, { AnalyserType } from "@/lib/hooks/useAnalyser";
 import AudioVisualizer from "./AudioVisualizer";
 import { Language } from "@/lib/utils/constant";
 import { behaviorAtom, BehaviorEnum } from "@/lib/recoil/behavior";
 import { useSetRecoilState } from "recoil";
+import styles from "./RecordInterface.module.scss";
 
 interface RecordProcessProps {
   stream: MediaStream | null;
@@ -24,9 +24,12 @@ const RecordInterface = ({stream, stopRecording, language}: RecordProcessProps) 
 
   return (
     <div className={styles.container}>
-      <p>{guideText}</p>
+      <p className={styles.text}>{guideText}</p>
       <AudioVisualizer audioData={audioData} />
-      <button onClick={() => stop()}>{completeText}</button>
+      <button onClick={stop} className={styles.button}>
+        <div className={styles.icon}/>
+        <p>{completeText}</p>
+      </button>
     </div>
   )
 }
