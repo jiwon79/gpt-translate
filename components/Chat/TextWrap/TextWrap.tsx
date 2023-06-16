@@ -8,11 +8,13 @@ interface TextWrapProps {
 }
 
 const TextWrap = ({text, translateText, reTranslateText, isLastChat}: TextWrapProps) => {
-  const reTranslateTextWrap = isLastChat
-    ? reTranslateText === ''
-      ? 'loading...'
-      : `(${reTranslateText})`
-    : '';
+  const reTranslateTextWrap = () => {
+    if (!isLastChat) return '';
+
+    if (reTranslateText === '') return 'loading...';
+    if (reTranslateText === ' ') return '';
+    return `(${reTranslateText})`;
+  }
 
   return (
     <div className={styles.text__wrap}>
@@ -23,7 +25,7 @@ const TextWrap = ({text, translateText, reTranslateText, isLastChat}: TextWrapPr
         {translateText === '' ? 'loading...' : translateText}
       </p>
       <p className={styles.text__reTranslate}>
-        {reTranslateTextWrap}
+        {reTranslateTextWrap()}
       </p>
     </div>
   );

@@ -56,9 +56,10 @@ const Chat = ({dialog, isLastChat}: MessageProps) => {
           reTranslateText={dialog.reTranslateText}
           isLastChat={isLastChat}
         />
-        <button className={styles.button__audio} onClick={() => playAudio()}>
-          <SpeechIcon color={styleGuide.grey600}/>
-        </button>
+        {isLastChat &&
+          <button className={styles.button__audio} onClick={() => playAudio()}>
+            <SpeechIcon color={styleGuide.grey600}/>
+          </button>}
       </div>
 
       <div className={styles.wrap__bottom}>

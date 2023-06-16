@@ -1,8 +1,10 @@
 import { ChangeEvent, useState } from "react";
+import { useSetRecoilState } from "recoil";
 
+import SendIcon from "@/components/Svg/Send";
 import useDialog from "@/lib/hooks/useDialog";
 import { behaviorAtom, BehaviorEnum } from "@/lib/recoil/behavior";
-import { useSetRecoilState } from "recoil";
+import styles from "./EditChat.module.scss";
 
 const EditChat = () => {
   const [text, setText] = useState<string | null>(null)
@@ -23,9 +25,19 @@ const EditChat = () => {
   }
 
   return (
-    <div>
-      <input type="text" onChange={handleText} value={text ?? getLastText()} />
-      <button onClick={() => completeEdit()}>완료</button>
+    <div className={styles.container}>
+      <input
+        className={styles.input}
+        type="text"
+        onChange={handleText}
+        value={text ?? getLastText()}
+      />
+      <button
+        onClick={completeEdit}
+        className={`${styles.button} ${text !== '' ? styles.active : ''}`}
+      >
+        <SendIcon />
+      </button>
     </div>
   )
 }

@@ -1,0 +1,39 @@
+@import "styles/styleGuide.module";
+
+.container {
+  display: flex;
+  height: 60px;
+  padding: 10px;
+  box-sizing: border-box;
+  width: $screenWidth;
+}
+
+.input {
+  flex: 1;
+  margin-right: 10px;
+  border-radius: 100px;
+  border: 2px solid $grey350;
+  padding: 0 0 0 10px;
+  font-size: 14px;
+}
+
+.button {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  outline: none;
+  border: none;
+  border-radius: 50%;
+  background-color: $grey300;
+
+  &.active {
+    background-color: $green;
+  }
+
+  svg {
+    transform: translate(-1px, 1px);
+  }
+}

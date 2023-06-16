@@ -5,12 +5,11 @@ import { audioArrayToUrl, reverseLanguage } from "@/lib/utils/function";
 import speechTextAPI from "@/lib/api/speechTextAPI";
 import { useRef } from "react";
 import useGptTranslate from "@/lib/hooks/useGptTranslate";
-import { toast } from "react-toastify";
 
 const useDialog = () => {
   const [dialogList, setDialogList] = useRecoilState(dialogListAtom)
   const lastDialogRef = useRef<Dialog | null>(null);
-  const { translateUsingGpt } = useGptTranslate();
+  const {translateUsingGpt} = useGptTranslate();
 
   const _updateLastDialog = () => {
     if (lastDialogRef.current === null) return;
@@ -26,7 +25,7 @@ const useDialog = () => {
     setDialogList(newDialogList);
   }
 
-  const createEmptyDialog = (language : Language) => {
+  const createEmptyDialog = (language: Language) => {
     const newDialog = {
       language: language,
       text: '',
@@ -84,9 +83,15 @@ const useDialog = () => {
       const failText = language === Language.KO
         ? '음성인식 실패'
         : 'Speech recognition failed.';
-      toast(failText);
-      setDialogList((dialogList) => dialogList.slice(0, dialogList.length - 1));
-      lastDialogRef.current = null;
+
+      lastDialogRef.current = {
+        ...lastDialogRef.current,
+        text: failText,
+        translateText: ' ',
+        reTranslateText: ' ',
+        ttsAudioUrl: '',
+      };
+      _updateLastDialog();
       return;
     }
 
