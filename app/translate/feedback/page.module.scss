@@ -8,8 +8,14 @@
   width: $screenWidth;
 }
 
-.text__alternative {
+.title {
   margin-top: 100px;
   font-size: 30px;
   font-weight: bold;
+}
+
+.text__raw {
+  font-size: 14px;
+  color: $grey650;
+  margin-bottom: 20px;
 }

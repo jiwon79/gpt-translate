@@ -2,12 +2,16 @@
 
 .alternative__wrap {
   display: flex;
+  align-items: start;
   margin: 10px;
 }
 
 .alternative {
   margin: 5px;
   position: revert;
+  outline: none;
+  border: none;
+  background-color: transparent;
 }
 
 .bubble {
@@ -19,14 +23,16 @@
 }
 
 .text__translate {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   margin-bottom: 4px;
+  text-align: start;
 }
 
 .text__reTranslate {
-  font-size: 16px;
+  font-size: 14px;
   color: $grey650;
+  text-align: start;
 }
 
 .bubble__tail {

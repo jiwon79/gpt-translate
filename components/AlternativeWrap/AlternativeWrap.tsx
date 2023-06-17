@@ -1,15 +1,22 @@
 import styles from './AlternativeWrap.module.scss';
 import AlternativeTranslate from "@/lib/model/AlternativeTranslate";
 import BubbleSmall from "@/components/Svg/BubbleSmall";
-import { toast } from "react-toastify";
 import styleGuide from "@/styles/styleGuide.module.scss";
+import useDialog from "@/lib/hooks/useDialog";
+import { useRouter } from "next/navigation";
 
 interface AlternativeWrapProps {
   alternativeTranslates: AlternativeTranslate[];
 }
 
 const AlternativeWrap = ({alternativeTranslates}: AlternativeWrapProps) => {
-  console.log(alternativeTranslates);
+  const router = useRouter();
+  const { acceptTranslateFeedback } = useDialog();
+
+  const onTapButton = async (alternativeTranslate: AlternativeTranslate) => {
+    await acceptTranslateFeedback(alternativeTranslate.translateText, alternativeTranslate.reTranslateText);
+    router.push('/translate');
+  }
 
   return (
     <div className={styles.alternative__wrap}>
@@ -23,13 +30,17 @@ const AlternativeWrap = ({alternativeTranslates}: AlternativeWrapProps) => {
           : `(${alternativeTranslate.reTranslateText})`;
 
         return (
-          <div key={index} className={styles.alternative}>
+          <button
+            key={index}
+            className={styles.alternative}
+            onClick={() => onTapButton(alternativeTranslate)}
+          >
             <div className={styles.bubble}>
               <p className={styles.text__translate}>{translateText}</p>
               <p className={styles.text__reTranslate}>{reTranslateText}</p>
             </div>
             <BubbleSmall color={styleGuide.grey300} classname={`${styles.bubble__tail} ${tailStyle}`}/>
-          </div>
+          </button>
         )
       })}
     </div>

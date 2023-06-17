@@ -102,8 +102,8 @@ const FeedbackPage = () => {
   return (
     <div className={styles.container}>
       <Header/>
-      <p className={styles.text__alternative}>이런 번역은 어떠세요?</p>
-      <p>원문 : {text}</p>
+      <p className={styles.title}>이런 번역은 어떠세요?</p>
+      <p className={styles.text__raw}>(원문 : {text})</p>
       <AlternativeWrap alternativeTranslates={alternativeTranslates} />
       <p>번역 요청 사항 입력하기</p>
       <input type="text" value={feedBackText} onChange={handleFeedbackText} />
