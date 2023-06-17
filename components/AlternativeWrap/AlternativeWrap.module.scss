@@ -1,0 +1,44 @@
+@import "styles/styleGuide.module";
+
+.alternative__wrap {
+  display: flex;
+  margin: 10px;
+}
+
+.alternative {
+  margin: 5px;
+  position: revert;
+}
+
+.bubble {
+  width: calc(($screenWidth - 100px) / 2);
+  border-radius: 10px;
+  background-color: $grey300;
+  box-shadow: $grey250 0 3px 6px 0;
+  padding: 8px;
+}
+
+.text__translate {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.text__reTranslate {
+  font-size: 16px;
+  color: $grey650;
+}
+
+.bubble__tail {
+  position: relative;
+  bottom: 2px;
+
+  &.bubble__tail__right {
+    float: right;
+  }
+
+  &.bubble__tail__left {
+    float: left;
+    transform: scaleX(-1);
+  }
+}

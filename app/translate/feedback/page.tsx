@@ -11,11 +11,10 @@ import { useRouter } from "next/navigation";
 import { Language } from "@/lib/utils/constant";
 import { Dialog } from "@/lib/recoil/dialogList";
 import styles from './page.module.scss';
-
-interface AlternativeTranslate {
-  translateText: string;
-  reTranslateText: string;
-}
+import Bubble from "@/components/Svg/Bubble";
+import BubbleSmall from "@/components/Svg/BubbleSmall";
+import AlternativeTranslate from "@/lib/model/AlternativeTranslate";
+import AlternativeWrap from "@/components/AlternativeWrap/AlternativeWrap";
 
 const FeedbackPage = () => {
   const router = useRouter();
@@ -43,12 +42,15 @@ const FeedbackPage = () => {
   useEffect(() => {
     (async () => {
       setIsLoading(true);
+      console.log('start');
       const alternativeTranslate = await getAlternativeTranslate(text, translateText);
+      console.log(alternativeTranslate);
       const alternativeTranslateTexts = alternativeTranslate.split("/");
       const reTranslateTexts = await Promise.all(alternativeTranslateTexts.map(async (text) => {
         const response = await speechTextAPI.translate(text, language);
         return response.result
       }));
+      console.log(reTranslateTexts);
       if (alternativeTranslateTexts.length !== reTranslateTexts.length) return;
       const alternativeTranslatesResult = alternativeTranslateTexts.map((translateText, index) => {
         return {
@@ -98,21 +100,11 @@ const FeedbackPage = () => {
   }
 
   return (
-    <>
+    <div className={styles.container}>
       <Header/>
-      <p>{text}</p>
-      <p>{language}</p>
-      <div className={styles.alternative__wrap}>
-        {alternativeTranslates.map((alternativeTranslate, index) => {
-          return (
-            <div key={index} className={styles.alternative}>
-              <p>{alternativeTranslate.translateText}</p>
-              <p>{alternativeTranslate.reTranslateText}</p>
-            </div>
-          )
-        })}
-      </div>
-      <p>이런 번역은 어떠세요?</p>
+      <p className={styles.text__alternative}>이런 번역은 어떠세요?</p>
+      <p>원문 : {text}</p>
+      <AlternativeWrap alternativeTranslates={alternativeTranslates} />
       <p>번역 요청 사항 입력하기</p>
       <input type="text" value={feedBackText} onChange={handleFeedbackText} />
       <button onClick={() => onTapRecordButton()}>녹음</button>
@@ -123,7 +115,7 @@ const FeedbackPage = () => {
       <p>{newTranslateText}</p>
       <p>{newReTranslateText}</p>
       <button onClick={() => onTapFeedbackAcceptButton()}>적용하기</button>
-    </>
+    </div>
   )
 }
 

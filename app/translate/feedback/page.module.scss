@@ -1,11 +1,15 @@
-@import 'styleGuide.module';
+@import 'styles/styleGuide.module';
 
-.alternative__wrap {
+.container {
   display: flex;
-  margin: 10px;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  width: $screenWidth;
 }
 
-.alternative {
-  margin: 5px;
-  background-color: $grey250;
+.text__alternative {
+  margin-top: 100px;
+  font-size: 30px;
+  font-weight: bold;
 }
