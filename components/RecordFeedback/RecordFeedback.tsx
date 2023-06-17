@@ -10,12 +10,20 @@ import useDialog from "@/lib/hooks/useDialog";
 import { Dialog } from "@/lib/recoil/dialogList";
 import { Language } from "@/lib/utils/constant";
 import { toast } from "react-toastify";
+import SendIcon from "@/components/Svg/Send";
+import MicEmpty from "@/components/Svg/MicEmpty";
+import styleGuide from "@/styles/styleGuide.module.scss";
+import BubbleSmall from "@/components/Svg/BubbleSmall";
 
-const RecordFeedback = () => {
+interface RecordFeedbackProps {
+  setIsLoading: (isLoading: boolean) => void;
+}
+
+const RecordFeedback = ({setIsLoading}: RecordFeedbackProps) => {
   const router = useRouter();
-  const { isRecording, audioURL, stream, startRecording, stopRecording } = useRecorder();
+  const {isRecording, audioURL, stream, startRecording, stopRecording} = useRecorder();
   const [feedBackText, setFeedBackText] = useState<string>('');
-  const {getAlternativeTranslate, acceptFeedback} = useGptTranslate();
+  const {acceptFeedback} = useGptTranslate();
   const {dialogList, acceptTranslateFeedback} = useDialog();
   const lastDialog: Dialog = dialogList.length > 0 ? dialogList[dialogList.length - 1] : {
     text: "",
@@ -66,21 +74,39 @@ const RecordFeedback = () => {
   const [newTranslateText, setNewTranslateText] = useState<string>('');
   const [newReTranslateText, setNewReTranslateText] = useState<string>('');
   const onTapFeedbackAcceptButton = async () => {
+    if (newTranslateText.trim() === '') return;
     await acceptTranslateFeedback(newTranslateText, newReTranslateText);
     router.back();
   }
 
+  const newTranslateTextView = newTranslateText.trim() === '' ? '피드백을 기다리는 중' : newTranslateText;
+
   return (
     <>
-      <input type="text" value={feedBackText} onChange={handleFeedbackText} />
-      <button onClick={() => onTapRecordButton()}>녹음</button>
+      <button className={styles.bubble} onClick={onTapFeedbackAcceptButton}>
+        <div className={styles.text__wrap}>
+          <p>{newTranslateTextView}</p>
+          <p>{newReTranslateText}</p>
+        </div>
+        <BubbleSmall color={styleGuide.grey300} classname={styles.bubble__tail} />
+      </button>
+
+      {!isRecording ?
+        <div className={styles.input__wrap}>
+          <input type="text" value={feedBackText} onChange={handleFeedbackText}/>
+          <button onClick={() => onTapRecordButton()}>
+            <MicEmpty color={styleGuide.green}/>
+          </button>
+          <button onClick={() => onTapAcceptButton()}>
+            <SendIcon/>
+          </button>
+        </div> :
+        <></>}
+
       {isRecording
         ? <RecordInterface stream={stream} stopRecording={stopRecording} language={language}/>
         : <></>}
-      <button onClick={() => onTapAcceptButton()}>피드백 받기</button>
-      <p>{newTranslateText}</p>
-      <p>{newReTranslateText}</p>
-      <button onClick={() => onTapFeedbackAcceptButton()}>적용하기</button></>
+    </>
   );
 }
 

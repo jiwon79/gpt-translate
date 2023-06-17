@@ -1,1 +1,7 @@
 @import "styles/styleGuide.module";
+
+.input__wrap {
+  display: flex;
+  align-items: center;
+  width: $screenWidth;
+}
