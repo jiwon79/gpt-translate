@@ -15,6 +15,7 @@ import Bubble from "@/components/Svg/Bubble";
 import BubbleSmall from "@/components/Svg/BubbleSmall";
 import AlternativeTranslate from "@/lib/model/AlternativeTranslate";
 import AlternativeWrap from "@/components/AlternativeWrap/AlternativeWrap";
+import RecordFeedback from "@/components/RecordFeedback/RecordFeedback";
 
 const FeedbackPage = () => {
   const router = useRouter();
@@ -42,15 +43,12 @@ const FeedbackPage = () => {
   useEffect(() => {
     (async () => {
       setIsLoading(true);
-      console.log('start');
       const alternativeTranslate = await getAlternativeTranslate(text, translateText);
-      console.log(alternativeTranslate);
       const alternativeTranslateTexts = alternativeTranslate.split("/");
       const reTranslateTexts = await Promise.all(alternativeTranslateTexts.map(async (text) => {
         const response = await speechTextAPI.translate(text, language);
         return response.result
       }));
-      console.log(reTranslateTexts);
       if (alternativeTranslateTexts.length !== reTranslateTexts.length) return;
       const alternativeTranslatesResult = alternativeTranslateTexts.map((translateText, index) => {
         return {
@@ -103,18 +101,13 @@ const FeedbackPage = () => {
     <div className={styles.container}>
       <Header/>
       <p className={styles.title}>이런 번역은 어떠세요?</p>
+      <p className={styles.sub__title}>원하는 번역을 클릭해주세요.</p>
       <p className={styles.text__raw}>(원문 : {text})</p>
       <AlternativeWrap alternativeTranslates={alternativeTranslates} />
+
+      <p>또는</p>
       <p>번역 요청 사항 입력하기</p>
-      <input type="text" value={feedBackText} onChange={handleFeedbackText} />
-      <button onClick={() => onTapRecordButton()}>녹음</button>
-      {isRecording
-        ? <RecordInterface stream={stream} stopRecording={stopRecording} language={language}/>
-        : <></>}
-      <button onClick={() => onTapAcceptButton()}>피드백 받기</button>
-      <p>{newTranslateText}</p>
-      <p>{newReTranslateText}</p>
-      <button onClick={() => onTapFeedbackAcceptButton()}>적용하기</button>
+      <RecordFeedback />
     </div>
   )
 }

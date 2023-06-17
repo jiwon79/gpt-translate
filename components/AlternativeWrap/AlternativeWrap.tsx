@@ -15,7 +15,7 @@ const AlternativeWrap = ({alternativeTranslates}: AlternativeWrapProps) => {
 
   const onTapButton = async (alternativeTranslate: AlternativeTranslate) => {
     await acceptTranslateFeedback(alternativeTranslate.translateText, alternativeTranslate.reTranslateText);
-    router.push('/translate');
+    router.back();
   }
 
   return (
