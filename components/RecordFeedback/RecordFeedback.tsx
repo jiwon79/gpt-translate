@@ -93,12 +93,18 @@ const RecordFeedback = ({setIsLoading}: RecordFeedbackProps) => {
 
       {!isRecording ?
         <div className={styles.input__wrap}>
-          <input type="text" value={feedBackText} onChange={handleFeedbackText}/>
-          <button onClick={() => onTapRecordButton()}>
-            <MicEmpty color={styleGuide.green}/>
+          <input className={styles.input} type="text" value={feedBackText} onChange={handleFeedbackText}/>
+          <button
+            className={`${styles.button__record} ${styles.button}`}
+            onClick={() => onTapRecordButton()}
+          >
+            <MicEmpty className={styles.icon} color={styleGuide.green}/>
           </button>
-          <button onClick={() => onTapAcceptButton()}>
-            <SendIcon/>
+          <button
+            className={`${styles.button__send} ${styles.button} ${feedBackText === '' ? styles.disabled : ''}`}
+            onClick={() => onTapAcceptButton()}
+          >
+            <SendIcon className={styles.icon} />
           </button>
         </div> :
         <></>}

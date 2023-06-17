@@ -4,4 +4,49 @@
   display: flex;
   align-items: center;
   width: $screenWidth;
+  box-sizing: border-box;
+  padding: 10px 8px 10px 8px;
+
+  .input {
+    height: 40px;
+    padding: 0;
+    border-radius: 20px;
+    border: 2px solid $grey350;
+    flex: 1;
+  }
+
+  .button {
+    outline: none;
+    border: none;
+    background-color: transparent;
+    box-sizing: border-box;
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 4px 0 4px;
+  }
+
+  .button__record {
+    border: 2px solid $grey350;
+
+    .icon {
+      transform: scale(0.7);
+    }
+  }
+
+  .button__send {
+    background-color: $green;
+
+    &.disabled {
+      background-color: $grey350;
+    }
+
+    .icon {
+      transform: translate(-1px, 1px);
+    }
+  }
 }
