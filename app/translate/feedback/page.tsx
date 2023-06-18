@@ -10,10 +10,11 @@ import styles from './page.module.scss';
 import AlternativeTranslate from "@/lib/model/AlternativeTranslate";
 import AlternativeWrap from "@/components/AlternativeWrap/AlternativeWrap";
 import RecordFeedback from "@/components/RecordFeedback/RecordFeedback";
+import Image from "next/image";
 
 const FeedbackPage = () => {
   const {dialogList, acceptTranslateFeedback} = useDialog();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const {getAlternativeTranslate, acceptFeedback} = useGptTranslate();
   const [alternativeTranslates, setAlternativeTranslates] = useState<AlternativeTranslate[]>([
     {translateText: "", reTranslateText: ""},
@@ -45,11 +46,22 @@ const FeedbackPage = () => {
         }
       });
       setAlternativeTranslates(alternativeTranslatesResult);
+      setIsLoading(false);
     })();
   }, [])
 
   return (
     <div className={styles.container}>
+      {isLoading && <div className={styles.model}>
+        <Image
+          className={styles.loading}
+          src={"/loading-gif.gif"}
+          width={40}
+          height={40}
+          alt={"loading"}
+        />
+      </div>}
+
       <Header/>
       <p className={styles.title}>이런 번역은 어떠세요?</p>
       <p className={styles.sub__title}>원하는 번역을 클릭해주세요.</p>

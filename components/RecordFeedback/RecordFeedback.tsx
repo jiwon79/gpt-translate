@@ -1,19 +1,23 @@
-import styles from "./RecordFeedback.module.scss";
-import { useRouter } from "next/navigation";
-import useRecorder from "@/lib/hooks/useRecorder";
-import RecordInterface from "@/components/RecordInterface/RecordInterface";
-import { ChangeEvent, useEffect, useState } from "react";
-import speechTextAPI from "@/lib/api/speechTextAPI";
-import { blobUrlToBase64 } from "@/lib/utils/function";
-import useGptTranslate from "@/lib/hooks/useGptTranslate";
-import useDialog from "@/lib/hooks/useDialog";
-import { Dialog } from "@/lib/recoil/dialogList";
-import { Language } from "@/lib/utils/constant";
+import Image from "next/image";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { ChangeEvent, useEffect, useState } from "react";
+
+import RecordInterface from "@/components/RecordInterface/RecordInterface";
 import SendIcon from "@/components/Svg/Send";
 import MicEmpty from "@/components/Svg/MicEmpty";
-import styleGuide from "@/styles/styleGuide.module.scss";
 import BubbleSmall from "@/components/Svg/BubbleSmall";
+
+import useRecorder from "@/lib/hooks/useRecorder";
+import useGptTranslate from "@/lib/hooks/useGptTranslate";
+import useDialog from "@/lib/hooks/useDialog";
+import { blobUrlToBase64 } from "@/lib/utils/function";
+import speechTextAPI from "@/lib/api/speechTextAPI";
+import { Dialog } from "@/lib/recoil/dialogList";
+import { Language } from "@/lib/utils/constant";
+
+import styleGuide from "@/styles/styleGuide.module.scss";
+import styles from "./RecordFeedback.module.scss";
 
 interface RecordFeedbackProps {
   setIsLoading: (isLoading: boolean) => void;
@@ -25,6 +29,8 @@ const RecordFeedback = ({setIsLoading}: RecordFeedbackProps) => {
   const [feedBackText, setFeedBackText] = useState<string>('');
   const {acceptFeedback} = useGptTranslate();
   const {dialogList, acceptTranslateFeedback} = useDialog();
+  const [newTranslateText, setNewTranslateText] = useState<string>('');
+  const [newReTranslateText, setNewReTranslateText] = useState<string>('');
   const lastDialog: Dialog = dialogList.length > 0 ? dialogList[dialogList.length - 1] : {
     text: "",
     translateText: "",
@@ -41,26 +47,6 @@ const RecordFeedback = ({setIsLoading}: RecordFeedbackProps) => {
     return response.translate;
   }
 
-  const handleFeedbackText = (e: ChangeEvent<HTMLInputElement>) => {
-    setFeedBackText(e.target.value);
-  }
-
-  const onTapRecordButton = () => {
-    if (isRecording) return;
-    startRecording();
-  }
-
-
-  const onTapAcceptButton = async () => {
-    const translateFeedback = await acceptFeedback(text, translateText, feedBackText, language);
-    setNewTranslateText(translateFeedback);
-    setNewReTranslateText('loading...');
-    const response = await speechTextAPI.translate(translateFeedback, language);
-    const reTranslateFeedback = response.result;
-    setNewReTranslateText(reTranslateFeedback);
-  }
-
-
   useEffect(() => {
     (async () => {
       if (!audioURL) return;
@@ -72,12 +58,31 @@ const RecordFeedback = ({setIsLoading}: RecordFeedbackProps) => {
     })();
   }, [audioURL]);
 
+  const handleFeedbackText = (e: ChangeEvent<HTMLInputElement>) => {
+    setFeedBackText(e.target.value);
+  }
 
-  const [newTranslateText, setNewTranslateText] = useState<string>('');
-  const [newReTranslateText, setNewReTranslateText] = useState<string>('');
+  const onTapRecordButton = () => {
+    if (isRecording) return;
+    startRecording();
+  }
+
+  const onTapAcceptButton = async () => {
+    setIsLoading(true);
+    const translateFeedback = await acceptFeedback(text, translateText, feedBackText, language);
+    setNewTranslateText(translateFeedback);
+    setNewReTranslateText('loading...');
+    const response = await speechTextAPI.translate(translateFeedback, language);
+    const reTranslateFeedback = response.result;
+    setNewReTranslateText(reTranslateFeedback);
+    setIsLoading(false);
+  }
+
   const onTapFeedbackAcceptButton = async () => {
     if (newTranslateText.trim() === '') return;
+    setIsLoading(true);
     await acceptTranslateFeedback(newTranslateText, newReTranslateText);
+    setIsLoading(false);
     router.back();
   }
 
