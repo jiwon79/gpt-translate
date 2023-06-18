@@ -44,6 +44,7 @@ const RecordFeedback = ({setIsLoading}: RecordFeedbackProps) => {
   const handleFeedbackText = (e: ChangeEvent<HTMLInputElement>) => {
     setFeedBackText(e.target.value);
   }
+
   const onTapRecordButton = () => {
     if (isRecording) return;
     startRecording();
@@ -53,6 +54,7 @@ const RecordFeedback = ({setIsLoading}: RecordFeedbackProps) => {
   const onTapAcceptButton = async () => {
     const translateFeedback = await acceptFeedback(text, translateText, feedBackText, language);
     setNewTranslateText(translateFeedback);
+    setNewReTranslateText('loading...');
     const response = await speechTextAPI.translate(translateFeedback, language);
     const reTranslateFeedback = response.result;
     setNewReTranslateText(reTranslateFeedback);
@@ -80,16 +82,19 @@ const RecordFeedback = ({setIsLoading}: RecordFeedbackProps) => {
   }
 
   const newTranslateTextView = newTranslateText.trim() === '' ? '피드백을 기다리는 중' : newTranslateText;
+  const newReTranslateTextView = newReTranslateText === '' ? '(...)' : `(${newReTranslateText})`;
 
   return (
     <>
       <button className={styles.bubble} onClick={onTapFeedbackAcceptButton}>
         <div className={styles.text__wrap}>
-          <p>{newTranslateTextView}</p>
-          <p>{newReTranslateText}</p>
+          <p className={styles.text__translate}>{newTranslateTextView}</p>
+          <p className={styles.text__reTranslate}>{newReTranslateTextView}</p>
         </div>
         <BubbleSmall color={styleGuide.grey300} classname={styles.bubble__tail} />
       </button>
+
+      <div className={styles.spacer} />
 
       {!isRecording ?
         <div className={styles.input__wrap}>

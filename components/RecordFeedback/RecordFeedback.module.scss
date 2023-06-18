@@ -1,5 +1,47 @@
 @import "styles/styleGuide.module";
 
+.bubble {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  outline: none;
+  border: none;
+  background-color: transparent;
+
+  .text__wrap {
+    background-color: $grey300;
+    width: calc($screenWidth - 60px);
+    padding: 8px;
+    border-radius: 10px;
+  }
+
+  .text__translate {
+    text-align: start;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 4px;
+  }
+
+  .text__reTranslate {
+    text-align: start;
+    font-size: 14px;
+    color: $grey650;
+
+  }
+
+  .bubble__tail {
+    position: relative;
+    left: 10px;
+    bottom: 2px;
+    transform: scaleX(-1);
+
+  }
+}
+
+.spacer {
+  flex: 1;
+}
+
 .input__wrap {
   display: flex;
   align-items: center;
@@ -9,7 +51,7 @@
 
   .input {
     height: 40px;
-    padding: 0;
+    padding: 0 10px 0 10px;
     border-radius: 20px;
     border: 2px solid $grey350;
     flex: 1;

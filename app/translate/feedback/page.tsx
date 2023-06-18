@@ -56,8 +56,10 @@ const FeedbackPage = () => {
       <p className={styles.text__raw}>(원문 : {text})</p>
       <AlternativeWrap alternativeTranslates={alternativeTranslates} />
 
-      <p>또는</p>
-      <p>번역 요청 사항 입력하기</p>
+      <div className={styles.bottom}>
+        <p className={styles.sub__title}>또는</p>
+        <p className={styles.title}>번역 요청 사항 입력하기</p>
+      </div>
       <RecordFeedback setIsLoading={setIsLoading} />
     </div>
   )
