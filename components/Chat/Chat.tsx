@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { useRouter } from "next/navigation";
 
 import SpeechIcon from "@/components/Svg/SpeechIcon";
@@ -13,6 +13,8 @@ import TextWrap from "./TextWrap/TextWrap";
 import ButtonWrap from "./ButtonWrap/ButtonWrap";
 import styleGuide from "@/styles/styleGuide.module.scss";
 import styles from './Chat.module.scss';
+import { headerAtom } from "@/lib/recoil";
+import { language } from "googleapis/build/src/apis/language";
 
 interface MessageProps {
   dialog: Dialog;
@@ -23,6 +25,7 @@ const Chat = ({dialog, isLastChat}: MessageProps) => {
   const router = useRouter();
   const audioRef = useRef<HTMLAudioElement>(null);
   const [behavior, setBehavior] = useRecoilState(behaviorAtom);
+  const setHeader = useSetRecoilState(headerAtom);
   const {deleteLastDialog} = useDialog();
 
   const playAudio = async () => {
@@ -36,6 +39,11 @@ const Chat = ({dialog, isLastChat}: MessageProps) => {
   }
 
   const onTapFeedbackButton = () => {
+    if (dialog.language === Language.EN) {
+      setHeader({label: "Feedback"});
+    } else {
+      setHeader({label: "피드백"});
+    }
     router.push("/translate/feedback");
   }
 
