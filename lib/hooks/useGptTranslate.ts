@@ -8,8 +8,14 @@ import { Language } from "@/lib/utils/constant";
 const useGptTranslate = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const dialogList = useRecoilValue(dialogListAtom);
+  const dialogPrompt = dialogList
+    .map((dialog) => `${dialog.language === Language.KO ? "KO" : "EN"} :  ${dialog.text}\n`)
+    .join("");
+
   const translatePrompt = [
     new Message("system", "You're a translation expert."),
+    new Message("system", "Below is the conversation so far, please use it as a guide and translate it into context."),
+    new Message("system", "Conversation script so far\n" + dialogPrompt),
     new Message("system", "Translate Korean to English and English to Korean. Don't say anything else, just tell me the result of the translation."),
     new Message("user", "안녕"),
     new Message("assistant", "Hello"),
@@ -30,9 +36,10 @@ const useGptTranslate = () => {
 
   const alternativeTranslatePrompt = [
     new Message("system", "You're a translation expert."),
+    new Message("system", "Below is the conversation so far, please use it as a guide and translate it into context."),
+    new Message("system", "Conversation script so far\n" + dialogPrompt),
     new Message("system", "Enter the 'RAW TEXT' and 'TRANSLATION', and provide 'TWO' different translations of the same meaning, separated by /."),
     new Message("system", "Do not provide the same translation as the original."),
-    new Message("system", "If the 'RAW TEXT' is in Korean, give user two translations in English."),
     new Message("user", alternativeTranslateInput("안녕", "Hello", Language.EN)),
     new Message("assistant", "Hi / What's up"),
     new Message("user", alternativeTranslateInput("내 이름은 레오야.", "My Name is Leo.", Language.EN)),
@@ -54,6 +61,8 @@ const useGptTranslate = () => {
 
     return [
       new Message("system", "You're a translation expert."),
+      new Message("system", "Below is the conversation so far, please use it as a guide and translate it into context."),
+      new Message("system", "Conversation script so far\n" + dialogPrompt),
       ...translateMessages,
       new Message("system", "If user input RAW TEXT, TRANSLATE, FEEDBACK, assistant will translate with FEEDBACK."),
       new Message("user", "RAW TEXT : '메뉴얼을 받을 수 있을까요?'"),
