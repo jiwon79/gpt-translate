@@ -40,19 +40,34 @@ const useGptTranslate = () => {
     }
   }
 
-  const alternativeTranslatePrompt = [
-    new Message("system", "You're a translation expert."),
-    infoPrompt,
-    ...dialogPromptMessages,
-    new Message("system", "Enter the 'RAW TEXT' and 'TRANSLATION', and provide 'TWO' different translations of the same meaning, separated by /."),
-    new Message("system", "Do not provide the same translation as the original."),
-    new Message("user", alternativeTranslateInput("안녕", "Hello", Language.EN)),
-    new Message("assistant", "Hi / What's up"),
-    new Message("user", alternativeTranslateInput("내 이름은 레오야.", "My Name is Leo.", Language.EN)),
-    new Message("assistant", "I'm called Leo. / I'm Leo."),
-    new Message("user", alternativeTranslateInput("How are you?", "오늘 어때?", Language.KO)),
-    new Message("assistant", "오늘 기분 어때? / 오늘 어떠니?"),
-  ];
+  const alternativeTranslatePrompt = (target: Language) => {
+    const defaultPromptMessages = [
+      new Message("system", "You're a translation expert."),
+      infoPrompt,
+      ...dialogPromptMessages,
+      new Message("system", "Enter the 'RAW TEXT' and 'TRANSLATION', and provide 'TWO' different translations of the same meaning of RAW TEXT, separated by /."),
+      new Message("system", "Do not provide the same translation as the original."),
+    ];
+
+    switch (target) {
+      case Language.KO:
+        return [
+          ...defaultPromptMessages,
+          new Message("user", alternativeTranslateInput("How are you?", "오늘 어때?", Language.KO)),
+          new Message("assistant", "오늘 기분 어때? / 오늘 어떠니?"),
+          new Message("user", alternativeTranslateInput("My name is Jiwon", "내 이름은 지원이야.", Language.KO)),
+          new Message("assistant", "나는 지원이야. / 나는 지원이라고 불려."),
+        ];
+      case Language.EN:
+        return [
+          ...defaultPromptMessages,
+          new Message("user", alternativeTranslateInput("안녕", "Hello", Language.EN)),
+          new Message("assistant", "Hi / What's up"),
+          new Message("user", alternativeTranslateInput("내 이름은 레오야.", "My Name is Leo.", Language.EN)),
+          new Message("assistant", "I'm called Leo. / I'm Leo."),
+        ];
+    }
+  };
 
   const acceptFeedbackPrompt = (language: Language) => {
     const translateMessages = language === Language.KO
@@ -84,7 +99,7 @@ const useGptTranslate = () => {
 
   const getAlternativeTranslate = async (text: string, translateText: string, target: Language) => {
     const messages = [
-      ...alternativeTranslatePrompt,
+      ...alternativeTranslatePrompt(target),
       new Message("user", alternativeTranslateInput(text, translateText, target)),
     ];
     console.log(messages)
