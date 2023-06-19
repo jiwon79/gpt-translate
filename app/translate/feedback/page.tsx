@@ -30,6 +30,12 @@ const FeedbackPage = () => {
   };
   const {text, translateText, language} = lastDialog;
 
+  const title = language === Language.KO ? "이런 번역은 어떠세요?" : "How about this translation?";
+  const subTitle = language === Language.KO ? "원하는 번역을 클릭해주세요." : "Please click the translation you want.";
+  const originText = language === Language.KO ? "원문" : "Original";
+  const or = language === Language.KO ? "또는" : "or";
+  const feedbackText = language === Language.KO ? "번역 요청 사항 입력하기" : "Enter translation request";
+
   useEffect(() => {
     (async () => {
       setIsLoading(true);
@@ -64,9 +70,9 @@ const FeedbackPage = () => {
       </div>}
 
       <Header/>
-      <p className={styles.title}>이런 번역은 어떠세요?</p>
-      <p className={styles.sub__title}>원하는 번역을 클릭해주세요.</p>
-      <p className={styles.text__raw}>(원문 : {text})</p>
+      <p className={styles.title}>{title}</p>
+      <p className={styles.sub__title}>{subTitle}</p>
+      <p className={styles.text__raw}>({originText} : {text})</p>
 
       <AlternativeWrap
         alternativeTranslates={alternativeTranslates}
@@ -74,8 +80,8 @@ const FeedbackPage = () => {
       />
 
       <div className={styles.bottom}>
-        <p className={styles.sub__title}>또는</p>
-        <p className={styles.title}>번역 요청 사항 입력하기</p>
+        <p className={styles.sub__title}>{or}</p>
+        <p className={styles.title}>{feedbackText}</p>
       </div>
       <RecordFeedback setIsLoading={setIsLoading} />
     </div>
