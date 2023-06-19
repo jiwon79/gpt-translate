@@ -2,8 +2,8 @@
 import TextInput from "@/components/TextInput/TextInput";
 import ToggleInput from "@/components/ToggleInput/ToggleInput";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { dialogListAtom, infoAtom } from "@/lib/recoil";
-import { ChangeEvent } from "react";
+import { dialogListAtom, headerAtom, infoAtom } from "@/lib/recoil";
+import { ChangeEvent, useEffect } from "react";
 
 import styles from './page.module.scss';
 import { useRouter } from "next/navigation";
@@ -11,10 +11,12 @@ import { useRouter } from "next/navigation";
 const Home = () => {
   const router = useRouter();
   const setDialogList = useSetRecoilState(dialogListAtom);
+  const setHeader = useSetRecoilState(headerAtom);
   const [info, setInfo] = useRecoilState(infoAtom);
 
   const onTapStartButton = () => {
     setDialogList([]);
+    setHeader({label: '대화', prevHref: '/'});
     router.push('/translate');
   }
 
@@ -37,6 +39,10 @@ const Home = () => {
   const handlePolite = () => {
     setInfo({...info, isPolite: !info.isPolite});
   }
+
+  useEffect(() => {
+    setInfo({isPolite: false, place: '', situation: ''});
+  }, []);
 
   return (
     <div className={styles.container}>

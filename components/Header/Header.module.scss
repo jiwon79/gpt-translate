@@ -14,11 +14,14 @@
   text-decoration: none;
 }
 
-.link {
+.button {
+  outline: none;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
   display: flex;
   align-items: center;
   text-decoration: none;
-  width: 100%;
 }
 
 .label {

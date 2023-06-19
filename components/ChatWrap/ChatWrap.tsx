@@ -31,6 +31,9 @@ const ChatWrap = () => {
         {info.situation === ''
           ? <></>
           : <p className={styles.info__situation}>상황 : {info.situation}</p>}
+        {info.isPolite
+          ? <p className={styles.info__polite}>높임말 : 사용</p>
+          : <p className={styles.info__polite}>높임말 : 미사용</p>}
       </div>
       <div>
         {dialogList.map((dialog, index) => (

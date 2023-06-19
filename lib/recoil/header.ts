@@ -5,7 +5,7 @@ const { persistAtom } = recoilPersist();
 
 export interface Header {
   label: string;
-  prevHref: string;
+  prevHref?: string;
 }
 
 const initialHeader = {
