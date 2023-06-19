@@ -7,14 +7,17 @@ import { useRouter } from "next/navigation";
 
 interface AlternativeWrapProps {
   alternativeTranslates: AlternativeTranslate[];
+  setIsLoading: (isLoading: boolean) => void;
 }
 
-const AlternativeWrap = ({alternativeTranslates}: AlternativeWrapProps) => {
+const AlternativeWrap = ({alternativeTranslates, setIsLoading}: AlternativeWrapProps) => {
   const router = useRouter();
   const { acceptTranslateFeedback } = useDialog();
 
   const onTapButton = async (alternativeTranslate: AlternativeTranslate) => {
+    setIsLoading(true);
     await acceptTranslateFeedback(alternativeTranslate.translateText, alternativeTranslate.reTranslateText);
+    setIsLoading(false);
     router.back();
   }
 

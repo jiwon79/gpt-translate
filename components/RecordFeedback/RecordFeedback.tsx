@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -18,9 +17,25 @@ import { Language } from "@/lib/utils/constant";
 
 import styleGuide from "@/styles/styleGuide.module.scss";
 import styles from "./RecordFeedback.module.scss";
+import AlternativeTranslate from "@/lib/model/AlternativeTranslate";
 
 interface RecordFeedbackProps {
   setIsLoading: (isLoading: boolean) => void;
+}
+
+const initialDialog: Dialog = {
+  text: "",
+  translateText: "",
+  language: Language.KO,
+  reTranslateText: "",
+  ttsAudioUrl: "",
+};
+
+const initialAlternativeTranslate = (lang: Language): AlternativeTranslate => {
+  return {
+    translateText: lang === Language.KO ? "피드백을 입력해주세요." : "Please input feedback",
+    reTranslateText: "",
+  };
 }
 
 const RecordFeedback = ({setIsLoading}: RecordFeedbackProps) => {
@@ -29,16 +44,9 @@ const RecordFeedback = ({setIsLoading}: RecordFeedbackProps) => {
   const [feedBackText, setFeedBackText] = useState<string>('');
   const {acceptFeedback} = useGptTranslate();
   const {dialogList, acceptTranslateFeedback} = useDialog();
-  const [newTranslateText, setNewTranslateText] = useState<string>('');
-  const [newReTranslateText, setNewReTranslateText] = useState<string>('');
-  const lastDialog: Dialog = dialogList.length > 0 ? dialogList[dialogList.length - 1] : {
-    text: "",
-    translateText: "",
-    language: Language.KO,
-    reTranslateText: "",
-    ttsAudioUrl: "",
-  };
+  const lastDialog: Dialog = dialogList.length > 0 ? dialogList[dialogList.length - 1] : initialDialog;
   const {text, translateText, language} = lastDialog;
+  const [feedbackTranslate, setFeedbackTranslate] = useState<AlternativeTranslate>(initialAlternativeTranslate(language));
 
   const fetchSTT = async (audioURL: string): Promise<string> => {
     const base64 = await blobUrlToBase64(audioURL);
@@ -70,24 +78,25 @@ const RecordFeedback = ({setIsLoading}: RecordFeedbackProps) => {
   const onTapAcceptButton = async () => {
     setIsLoading(true);
     const translateFeedback = await acceptFeedback(text, translateText, feedBackText, language);
-    setNewTranslateText(translateFeedback);
-    setNewReTranslateText('loading...');
+    setFeedbackTranslate({translateText: translateFeedback, reTranslateText: 'loading...'});
     const response = await speechTextAPI.translate(translateFeedback, language);
     const reTranslateFeedback = response.result;
-    setNewReTranslateText(reTranslateFeedback);
+    setFeedbackTranslate((prev): AlternativeTranslate => ({...prev, reTranslateText: reTranslateFeedback}));
     setIsLoading(false);
   }
 
   const onTapFeedbackAcceptButton = async () => {
-    if (newTranslateText.trim() === '') return;
+    if (feedBackText.trim() === '') return;
     setIsLoading(true);
-    await acceptTranslateFeedback(newTranslateText, newReTranslateText);
+    await acceptTranslateFeedback(feedbackTranslate.translateText, feedbackTranslate.reTranslateText);
     setIsLoading(false);
     router.back();
   }
 
-  const newTranslateTextView = newTranslateText.trim() === '' ? '피드백을 기다리는 중' : newTranslateText;
-  const newReTranslateTextView = newReTranslateText === '' ? '(...)' : `(${newReTranslateText})`;
+  const newTranslateTextView = feedbackTranslate.translateText
+  const newReTranslateTextView = feedbackTranslate.reTranslateText === ''
+    ? '(...)'
+    : `(${feedbackTranslate.reTranslateText})`;
 
   return (
     <>
@@ -96,10 +105,10 @@ const RecordFeedback = ({setIsLoading}: RecordFeedbackProps) => {
           <p className={styles.text__translate}>{newTranslateTextView}</p>
           <p className={styles.text__reTranslate}>{newReTranslateTextView}</p>
         </div>
-        <BubbleSmall color={styleGuide.grey300} classname={styles.bubble__tail} />
+        <BubbleSmall color={styleGuide.grey300} classname={styles.bubble__tail}/>
       </button>
 
-      <div className={styles.spacer} />
+      <div className={styles.spacer}/>
 
       {!isRecording ?
         <div className={styles.input__wrap}>
@@ -114,7 +123,7 @@ const RecordFeedback = ({setIsLoading}: RecordFeedbackProps) => {
             className={`${styles.button__send} ${styles.button} ${feedBackText === '' ? styles.disabled : ''}`}
             onClick={() => onTapAcceptButton()}
           >
-            <SendIcon className={styles.icon} />
+            <SendIcon className={styles.icon}/>
           </button>
         </div> :
         <></>}

@@ -11,6 +11,7 @@ import AlternativeTranslate from "@/lib/model/AlternativeTranslate";
 import AlternativeWrap from "@/components/AlternativeWrap/AlternativeWrap";
 import RecordFeedback from "@/components/RecordFeedback/RecordFeedback";
 import Image from "next/image";
+import { reverseLanguage } from "@/lib/utils/function";
 
 const FeedbackPage = () => {
   const {dialogList, acceptTranslateFeedback} = useDialog();
@@ -32,7 +33,7 @@ const FeedbackPage = () => {
   useEffect(() => {
     (async () => {
       setIsLoading(true);
-      const alternativeTranslate = await getAlternativeTranslate(text, translateText);
+      const alternativeTranslate = await getAlternativeTranslate(text, translateText, reverseLanguage(language));
       const alternativeTranslateTexts = alternativeTranslate.split("/");
       const reTranslateTexts = await Promise.all(alternativeTranslateTexts.map(async (text) => {
         const response = await speechTextAPI.translate(text, language);
@@ -66,7 +67,11 @@ const FeedbackPage = () => {
       <p className={styles.title}>이런 번역은 어떠세요?</p>
       <p className={styles.sub__title}>원하는 번역을 클릭해주세요.</p>
       <p className={styles.text__raw}>(원문 : {text})</p>
-      <AlternativeWrap alternativeTranslates={alternativeTranslates} />
+
+      <AlternativeWrap
+        alternativeTranslates={alternativeTranslates}
+        setIsLoading={setIsLoading}
+      />
 
       <div className={styles.bottom}>
         <p className={styles.sub__title}>또는</p>
