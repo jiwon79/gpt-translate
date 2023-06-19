@@ -1,21 +1,27 @@
 import { useRecoilValue } from "recoil";
-import { dialogListAtom } from "@/lib/recoil";
+import { dialogListAtom, infoAtom } from "@/lib/recoil";
 import Message from "@/lib/model/Message";
 import chatAPI from "@/lib/api/chatAPI";
-import { useState } from "react";
 import { Language } from "@/lib/utils/constant";
 
 const useGptTranslate = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const dialogList = useRecoilValue(dialogListAtom);
+  const info = useRecoilValue(infoAtom);
+
   const dialogPrompt = dialogList
     .map((dialog) => `${dialog.language === Language.KO ? "KO" : "EN"} :  ${dialog.text}\n`)
     .join("");
+  const dialogPromptMessages = [
+    new Message("system", "Below is the conversation so far, please use it as a guide and translate it into context."),
+    new Message("system", "Conversation script so far\n" + dialogPrompt),
+  ];
+
+  const infoPrompt = new Message("system", `You are translating in the following situations.\nPlace : ${info.place}, Situation : ${info.situation}, Politeness : ${info.isPolite ? "Polite" : "Casual"}`);
 
   const translatePrompt = [
     new Message("system", "You're a translation expert."),
-    new Message("system", "Below is the conversation so far, please use it as a guide and translate it into context."),
-    new Message("system", "Conversation script so far\n" + dialogPrompt),
+    infoPrompt,
+    ...dialogPromptMessages,
     new Message("system", "Translate Korean to English and English to Korean. Don't say anything else, just tell me the result of the translation."),
     new Message("user", "안녕"),
     new Message("assistant", "Hello"),
@@ -36,8 +42,8 @@ const useGptTranslate = () => {
 
   const alternativeTranslatePrompt = [
     new Message("system", "You're a translation expert."),
-    new Message("system", "Below is the conversation so far, please use it as a guide and translate it into context."),
-    new Message("system", "Conversation script so far\n" + dialogPrompt),
+    infoPrompt,
+    ...dialogPromptMessages,
     new Message("system", "Enter the 'RAW TEXT' and 'TRANSLATION', and provide 'TWO' different translations of the same meaning, separated by /."),
     new Message("system", "Do not provide the same translation as the original."),
     new Message("user", alternativeTranslateInput("안녕", "Hello", Language.EN)),
@@ -61,8 +67,8 @@ const useGptTranslate = () => {
 
     return [
       new Message("system", "You're a translation expert."),
-      new Message("system", "Below is the conversation so far, please use it as a guide and translate it into context."),
-      new Message("system", "Conversation script so far\n" + dialogPrompt),
+      infoPrompt,
+      ...dialogPromptMessages,
       ...translateMessages,
       new Message("system", "If user input RAW TEXT, TRANSLATE, FEEDBACK, assistant will translate with FEEDBACK."),
       new Message("user", "RAW TEXT : '메뉴얼을 받을 수 있을까요?'"),
